@@ -1,0 +1,58 @@
+buildscript {
+	ext {
+		springBootVersion = '1.5.9.RELEASE'
+	}
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+	}
+}
+
+plugins {
+	id "io.franzbecker.gradle-lombok" version "1.11"
+}
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'org.springframework.boot'
+
+group = 'com.sberbank.cms'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = 1.8
+
+repositories {
+	mavenCentral()
+	maven { url 'https://maven.vaadin.com/vaadin-addons' }
+}
+
+ext {
+	vaadinVersion = '8.1.7'
+}
+
+dependencies {
+	compile('com.vaadin:vaadin-spring-boot-starter')
+	compile('com.vaadin:vaadin-compatibility-themes')
+	compile('com.vaadin:vaadin-compatibility-server')
+	compile('com.vaadin:vaadin-compatibility-client-compiled')
+	compile('com.vaadin:vaadin-themes')
+	compile("org.springframework.boot:spring-boot-starter-data-jpa")
+	compile("org.springframework.boot:spring-boot-starter-data-rest")
+	//FIXME
+	compile("org.glassfish.web:el-impl:2.2")
+	//compile("org.springframework.boot:spring-boot-starter-actuator")
+	compile('org.vaadin.spring.extensions:vaadin-spring-ext-boot:2.0.0.RELEASE')
+	compile('org.vaadin.spring.addons:vaadin-spring-addon-eventbus:2.0.0.RELEASE')
+	compile('org.vaadin.spring.addons:vaadin-spring-addon-sidebar:2.0.0.RELEASE')
+	compile("org.vaadin:viritin:2.1")
+	runtime("com.h2database:h2")
+	testCompile("junit:junit")
+	testCompile('org.springframework.boot:spring-boot-starter-test')
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "com.vaadin:vaadin-bom:${vaadinVersion}"
+	}
+}
