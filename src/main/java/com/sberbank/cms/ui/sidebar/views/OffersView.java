@@ -52,12 +52,10 @@ public class OffersView extends VerticalLayout implements View {
             //.setSortableProperties("name", "email")
             .withFullWidth();
 
-    private MTextField filterByName = new MTextField()
-            .withPlaceholder("Filter by name");
+    private MTextField filterByName = new MTextField().withPlaceholder("Filter by name");
     private Button addNew = new MButton(VaadinIcons.PLUS, this::add);
     private Button edit = new MButton(VaadinIcons.PENCIL, this::edit);
-    private Button delete = new ConfirmButton(VaadinIcons.TRASH,
-            "Are you sure you want to delete the entry?", this::remove);
+    private Button delete = new ConfirmButton(VaadinIcons.TRASH, "Are you sure you want to delete the entry?", this::remove);
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
