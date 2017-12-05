@@ -36,9 +36,10 @@ dependencies {
 	compile('com.vaadin:vaadin-compatibility-themes')
 	compile('com.vaadin:vaadin-compatibility-server')
 	compile('com.vaadin:vaadin-compatibility-client-compiled')
-	compile('com.vaadin:vaadin-themes')
 	compile("org.springframework.boot:spring-boot-starter-data-jpa")
 	compile("org.springframework.boot:spring-boot-starter-data-rest")
+	compile("org.springframework.boot:spring-boot-starter-security")
+	compile("org.springframework.boot:spring-boot-devtools")
 	//FIXME
 	compile("org.glassfish.web:el-impl:2.2")
 	//compile("org.springframework.boot:spring-boot-starter-actuator")
