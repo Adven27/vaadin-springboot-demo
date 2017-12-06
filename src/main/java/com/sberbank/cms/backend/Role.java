@@ -1,15 +1,14 @@
 package com.sberbank.cms.backend;
 
 public class Role {
-	public static final String OFFICER = "officer";
-	public static final String ADMIN = "admin";
+    private static final String AUTH_PREFIX = "ROLE_";
+    public static final String OFFICER = "officer";
+    public static final String ADMIN = "admin";
+    public static final String ROLE_ADMIN = AUTH_PREFIX + ADMIN;
+    public static final String ROLE_OFFICER = AUTH_PREFIX + OFFICER;
+    public static final String[] ALL = {OFFICER, ADMIN};
 
-	private Role() {
-		// Static methods and fields only
-	}
-
-	public static String[] getAllRoles() {
-		return new String[] {OFFICER, ADMIN };
-	}
-
+    private Role() {
+        // Static methods and fields only
+    }
 }

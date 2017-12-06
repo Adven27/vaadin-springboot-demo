@@ -27,10 +27,10 @@ public class UserForm extends AbstractForm<UserInfo> {
     private EventBus.UIEventBus eventBus;
     private UserRepository repo;
     private PasswordEncoder passwordEncoder;
-    TextField name = new MTextField("Name");
-    TextField login = new MTextField("Login");
-    PasswordField password = new PasswordField("Password");
-    ComboBox<String> role = new ComboBox<>("Role");
+    private TextField name = new MTextField("Name");
+    private TextField login = new MTextField("Login");
+    private PasswordField password = new PasswordField("Password");
+    private ComboBox<String> role = new ComboBox<>("Role");
 
     UserForm(UserRepository r, EventBus.UIEventBus b, PasswordEncoder passwordEncoder) {
         super(UserInfo.class);
@@ -44,7 +44,7 @@ public class UserForm extends AbstractForm<UserInfo> {
         });
         setResetHandler(userInfo -> eventBus.publish(this, new UserModifiedEvent(userInfo)));
         setSizeUndefined();
-        role.setItems(Role.getAllRoles());
+        role.setItems(Role.ALL);
     }
 
     @Override

@@ -6,15 +6,9 @@ Hint to Vaadin that if this page is ever sent back as response to a UIDL request
 Vaadin-Refresh: context://login.html
 -->
 <head>
-  <title>My Starter Project</title>
+  <title>CMS</title>
   
   <link rel="shortcut icon" href="VAADIN/themes/apptheme/favicon.ico" />
-  
-  <link rel="icon" sizes="192x192" href="VAADIN/themes/apptheme/icon-192.png">
-  <link rel="icon" sizes="96x96" href="VAADIN/themes/apptheme/icon-96.png">
-  
-  <link rel="apple-touch-icon" sizes="192x192" href="VAADIN/themes/apptheme/icon-192.png">
-  <link rel="apple-touch-icon" sizes="96x96" href="VAADIN/themes/apptheme/icon-96.png">
   
   <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
   
@@ -67,7 +61,7 @@ Vaadin-Refresh: context://login.html
       width: 60px;
       height: 60px;
       border-radius: 100%;
-      background-image: url(VAADIN/themes/apptheme/icon-96.png);
+      background-image: url(VAADIN/themes/apptheme/icon.png);
       background-size: contain;
       background-repeat: no-repeat;
       background-color: rgba(255,255,255,0.2);
@@ -210,13 +204,13 @@ Vaadin-Refresh: context://login.html
 <body onload="init()">
 	<div id="info">
 		<div id="logo"></div>
-		<h1>My Starter Project</h1>
-		<p>admin@vaadin.com + admin <br> barista@vaadin.com + barista</p>
+		<h1>Content Management System</h1>
+		<p>admin/admin<br>op/op</p>
 	</div>
 	<div id="form">
 		<form method="post" action="login" id="theform">
 			<h2>Sign in</h2>
-			<label id="login-label" for="login">Email</label>
+			<label id="login-label" for="login">Login</label>
 			<input type="text" id="login" name="username" aria-labelledby="login-label" autofocus>
 			<label id="password-label" for="password">Password</label>
 			<input type="password" id="password" name="password" aria-labelledby="password-label">

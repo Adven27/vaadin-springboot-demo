@@ -1,5 +1,6 @@
 package com.sberbank.cms.ui.sidebar.settings.users;
 
+import com.sberbank.cms.backend.Role;
 import com.sberbank.cms.backend.UserInfo;
 import com.sberbank.cms.backend.UserRepository;
 import com.vaadin.icons.VaadinIcons;
@@ -10,6 +11,7 @@ import com.vaadin.spring.annotation.ViewScope;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.VerticalLayout;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.vaadin.spring.events.EventBus;
 import org.vaadin.spring.events.EventScope;
 import org.vaadin.spring.events.annotation.EventBusListenerMethod;
@@ -25,6 +27,7 @@ import org.vaadin.viritin.layouts.MVerticalLayout;
 import static com.sberbank.cms.ui.sidebar.Sections.SETTINGS;
 import static com.vaadin.icons.VaadinIcons.USERS;
 
+@Secured({Role.ROLE_ADMIN})
 @SpringView(name = UsersView.VIEW_NAME)
 @SideBarItem(sectionId = SETTINGS, caption = "Users", order = 1)
 @VaadinFontIcon(USERS)
@@ -43,9 +46,9 @@ public class UsersView extends VerticalLayout implements View {
     private MGrid<UserInfo> list = new MGrid<>(UserInfo.class)
             .withProperties("id", "name", "login", "role")
             .withColumnHeaders("id", "Name", "Login", "Role")
-            .withFullWidth();
+            .withFullSize();
 
-    private MTextField filterByName = new MTextField().withPlaceholder("Filter by name");
+    private MTextField filterByName = new MTextField().withPlaceholder("Search by name or login...");
     private Button addNew = new MButton(VaadinIcons.PLUS, this::add);
     private Button edit = new MButton(VaadinIcons.PENCIL, this::edit);
     private Button delete = new ConfirmButton(VaadinIcons.TRASH, "Are you sure you want to delete the entry?", this::remove);
@@ -54,9 +57,9 @@ public class UsersView extends VerticalLayout implements View {
     public void enter(ViewChangeListener.ViewChangeEvent event) {
         addComponent(
                 new MVerticalLayout(
-                        new MHorizontalLayout(filterByName, addNew, edit, delete)
+                        new MHorizontalLayout(filterByName, addNew, edit, delete).expand(filterByName)
                 ).expand(
-                        list
+                        new MHorizontalLayout().expand(list)
                 )
         );
         listEntities();

@@ -11,9 +11,9 @@ import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.ViewScope;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.VerticalLayout;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.annotation.Secured;
 import org.vaadin.spring.events.EventBus;
 import org.vaadin.spring.events.EventScope;
 import org.vaadin.spring.events.annotation.EventBusListenerMethod;
@@ -28,38 +28,46 @@ import org.vaadin.viritin.layouts.MVerticalLayout;
 
 import java.util.List;
 
+import static com.sberbank.cms.backend.Role.ROLE_ADMIN;
+import static com.sberbank.cms.backend.Role.ROLE_OFFICER;
+import static com.vaadin.icons.VaadinIcons.SHOP;
+
+@Secured({ROLE_ADMIN, ROLE_OFFICER})
 @SpringView(name = OffersView.VIEW_NAME)
 @SideBarItem(sectionId = Sections.PLANNING, caption = "Offers", order = 1)
-@VaadinFontIcon(VaadinIcons.SHOP)
+@VaadinFontIcon(SHOP)
 @ViewScope
 public class OffersView extends VerticalLayout implements View {
     public static final String VIEW_NAME = "";//default view
     private static final long serialVersionUID = 2217814051618370412L;
 
-    @Autowired
-    OfferRepository repo;
-    @Autowired
-    OfferForm offerForm;
-    @Autowired
-    EventBus.UIEventBus eventBus;
+    private final OfferRepository repo;
+    private final OfferForm offerForm;
+    private final EventBus.UIEventBus eventBus;
 
     private MGrid<Offer> list = new MGrid<>(Offer.class)
             .withProperties("id", "name", "desc", "weight", "expirationDate", "flag")
             .withColumnHeaders("id", "Name", "Desc", "Weight", "Expire", "Flag")
-            .withFullWidth();
+            .withFullSize();
 
     private MTextField filterByName = new MTextField().withPlaceholder("Filter by name");
     private Button addNew = new MButton(VaadinIcons.PLUS, this::add);
     private Button edit = new MButton(VaadinIcons.PENCIL, this::edit);
     private Button delete = new ConfirmButton(VaadinIcons.TRASH, "Are you sure you want to delete the entry?", this::remove);
 
+    public OffersView(OfferRepository repo, OfferForm offerForm, EventBus.UIEventBus eventBus) {
+        this.repo = repo;
+        this.offerForm = offerForm;
+        this.eventBus = eventBus;
+    }
+
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
         addComponent(
                 new MVerticalLayout(
-                        new MHorizontalLayout(filterByName, addNew, edit, delete)
+                        new MHorizontalLayout(filterByName, addNew, edit, delete).expand(filterByName)
                 ).expand(
-                        list
+                        new MHorizontalLayout().expand(list)
                 )
         );
         listEntities();
@@ -100,7 +108,6 @@ public class OffersView extends VerticalLayout implements View {
                 () -> (int) repo.countByNameLike(likeFilter)
         );
         adjustActionButtonState();
-
     }
 
     private void add(Button.ClickEvent clickEvent) {
