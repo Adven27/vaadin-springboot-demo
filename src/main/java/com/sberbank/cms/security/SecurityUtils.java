@@ -1,7 +1,7 @@
 package com.sberbank.cms.security;
 
-import com.sberbank.cms.backend.User;
-import com.sberbank.cms.backend.UserService;
+import com.sberbank.cms.backend.UserInfo;
+import com.sberbank.cms.backend.UserRepository;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -64,7 +64,7 @@ public class SecurityUtils {
 	 *
 	 * @return the user object
 	 */
-	public static User getCurrentUser(UserService userService) {
-		return userService.findByEmail(SecurityUtils.getUsername());
+	public static UserInfo getCurrentUser(UserRepository repo) {
+		return repo.findByLogin(SecurityUtils.getUsername());
 	}
 }

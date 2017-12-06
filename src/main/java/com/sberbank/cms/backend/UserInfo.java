@@ -10,23 +10,19 @@ import java.util.Objects;
 
 @NoArgsConstructor
 @Data
-@Entity(name = "UserInfo")
-public class User {
-
+@Entity
+public class UserInfo {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
-    @Version
-    private int version;
 
     @NotNull
     @Size(min = 1, max = 255)
     @Column(unique = true)
-    private String email;
+    private String login;
 
     @NotNull
-    @Size(min = 4, max = 255)
+    @Size(min = 1, max = 255)
     private String password;
 
     @NotNull
@@ -39,13 +35,13 @@ public class User {
 
     private boolean locked = false;
 
-    public User(String email, String name, String password, String role) {
-        Objects.requireNonNull(email);
+    public UserInfo(String login, String name, String password, String role) {
+        Objects.requireNonNull(login);
         Objects.requireNonNull(name);
         Objects.requireNonNull(password);
         Objects.requireNonNull(role);
 
-        this.email = email;
+        this.login = login;
         this.name = name;
         this.password = password;
         this.role = role;

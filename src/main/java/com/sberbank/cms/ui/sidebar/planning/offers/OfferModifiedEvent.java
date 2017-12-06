@@ -1,4 +1,4 @@
-package com.sberbank.cms.ui.offers;
+package com.sberbank.cms.ui.sidebar.planning.offers;
 
 import com.sberbank.cms.backend.Offer;
 import lombok.Getter;

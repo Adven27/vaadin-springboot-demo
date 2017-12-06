@@ -1,15 +1,14 @@
 package com.sberbank.cms.backend;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UserRepository extends JpaRepository<User, Long> {
+import java.util.List;
 
-	User findByEmail(String email);
+public interface UserRepository extends JpaRepository<UserInfo, Long> {
 
-	Page<User> findByEmailLikeIgnoreCaseOrNameLikeIgnoreCaseOrRoleLikeIgnoreCase(String emailLike, String nameLike,
-                                                                                 String roleLike, Pageable pageable);
+	UserInfo findByLogin(String login);
 
-	long countByEmailLikeIgnoreCaseOrNameLikeIgnoreCase(String emailLike, String nameLike);
+	List<UserInfo> findByLoginLikeIgnoreCaseOrNameLikeIgnoreCase(String loginLike, String nameLike);
+
+	long countByLoginLikeIgnoreCaseOrNameLikeIgnoreCase(String loginLike, String nameLike);
 }

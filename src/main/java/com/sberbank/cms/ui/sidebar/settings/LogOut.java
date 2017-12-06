@@ -1,5 +1,6 @@
-package com.sberbank.cms.ui.sidebar;
+package com.sberbank.cms.ui.sidebar.settings;
 
+import com.sberbank.cms.ui.sidebar.Sections;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.UI;
@@ -9,7 +10,7 @@ import org.vaadin.spring.sidebar.annotation.VaadinFontIcon;
 
 import java.io.Serializable;
 
-@SideBarItem(sectionId = Sections.EXECUTION, caption = "Log out")
+@SideBarItem(sectionId = Sections.SETTINGS, caption = "Log out")
 @VaadinFontIcon(VaadinIcons.OUT)
 @Component
 @UIScope

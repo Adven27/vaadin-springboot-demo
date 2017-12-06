@@ -1,5 +1,6 @@
-package com.sberbank.cms.ui.sidebar;
+package com.sberbank.cms.ui.sidebar.planning;
 
+import com.sberbank.cms.ui.sidebar.Sections;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.Notification;

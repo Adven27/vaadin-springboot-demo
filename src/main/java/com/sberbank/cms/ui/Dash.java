@@ -1,6 +1,6 @@
 package com.sberbank.cms.ui;
 
-import com.sberbank.cms.ui.sidebar.views.ErrorView;
+import com.sberbank.cms.ui.sidebar.ErrorView;
 import com.vaadin.annotations.Theme;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.server.FontAwesome;

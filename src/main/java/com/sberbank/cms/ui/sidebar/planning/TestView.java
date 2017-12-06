@@ -1,4 +1,4 @@
-package com.sberbank.cms.ui.sidebar.views;
+package com.sberbank.cms.ui.sidebar.planning;
 
 import com.sberbank.cms.ui.sidebar.Sections;
 import com.vaadin.icons.VaadinIcons;

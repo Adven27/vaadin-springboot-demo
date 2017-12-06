@@ -1,4 +1,4 @@
-package com.sberbank.cms.ui.sidebar.views;
+package com.sberbank.cms.ui.sidebar;
 
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;

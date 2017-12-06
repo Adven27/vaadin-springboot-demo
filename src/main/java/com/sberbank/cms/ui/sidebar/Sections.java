@@ -11,10 +11,10 @@ import org.vaadin.spring.sidebar.annotation.SideBarSections;
  */
 @SideBarSections({
         @SideBarSection(id = Sections.PLANNING, caption = "Section 1"),
-        @SideBarSection(id = Sections.EXECUTION, caption = "Section 2"),
+        @SideBarSection(id = Sections.SETTINGS, caption = "Settings"),
 })
 @Component
 public class Sections {
     public static final String PLANNING = "planning";
-    public static final String EXECUTION = "execution";
+    public static final String SETTINGS = "settings";
 }
