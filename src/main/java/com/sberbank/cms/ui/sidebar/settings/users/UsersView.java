@@ -3,6 +3,7 @@ package com.sberbank.cms.ui.sidebar.settings.users;
 import com.sberbank.cms.backend.Role;
 import com.sberbank.cms.backend.UserInfo;
 import com.sberbank.cms.backend.UserRepository;
+import com.sberbank.cms.ui.common.ModifiedEvent;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
@@ -106,7 +107,7 @@ public class UsersView extends VerticalLayout implements View {
     }
 
     @EventBusListenerMethod(scope = EventScope.UI)
-    public void onPersonModified(UserModifiedEvent event) {
+    public void onPersonModified(ModifiedEvent event) {
         listEntities();
         userForm.closePopup();
     }

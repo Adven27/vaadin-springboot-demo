@@ -2,6 +2,7 @@ package com.sberbank.cms.ui.sidebar.planning.offers;
 
 import com.sberbank.cms.backend.Offer;
 import com.sberbank.cms.backend.OfferRepository;
+import com.sberbank.cms.ui.common.ModifiedEvent;
 import com.sberbank.cms.ui.sidebar.Sections;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
@@ -130,7 +131,7 @@ public class OffersView extends VerticalLayout implements View {
     }
 
     @EventBusListenerMethod(scope = EventScope.UI)
-    public void onPersonModified(OfferModifiedEvent event) {
+    public void onPersonModified(ModifiedEvent event) {
         listEntities();
         offerForm.closePopup();
     }

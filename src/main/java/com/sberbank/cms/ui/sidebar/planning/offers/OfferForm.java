@@ -2,6 +2,7 @@ package com.sberbank.cms.ui.sidebar.planning.offers;
 
 import com.sberbank.cms.backend.Offer;
 import com.sberbank.cms.backend.OfferRepository;
+import com.sberbank.cms.ui.common.forms.CommonForm;
 import com.vaadin.data.converter.LocalDateToDateConverter;
 import com.vaadin.data.converter.StringToIntegerConverter;
 import com.vaadin.spring.annotation.SpringComponent;
@@ -9,35 +10,23 @@ import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.*;
 import org.vaadin.spring.events.EventBus;
 import org.vaadin.viritin.fields.MTextField;
-import org.vaadin.viritin.form.AbstractForm;
 import org.vaadin.viritin.layouts.MFormLayout;
-import org.vaadin.viritin.layouts.MVerticalLayout;
 
 @UIScope
 @SpringComponent
-public class OfferForm extends AbstractForm<Offer> {
+public class OfferForm extends CommonForm<Offer> {
     private static final long serialVersionUID = 1L;
 
-    EventBus.UIEventBus eventBus;
-    OfferRepository repo;
+    private OfferRepository repo;
+    private TextField name = new MTextField("Name");
+    private RichTextArea desc = new RichTextArea("Desc");
+    private TextField weight = new MTextField("Weight");
+    private DateField expirationDate = new DateField("Expiration date");
+    private CheckBox flag = new CheckBox("Flag");
 
-    TextField name = new MTextField("Name");
-    RichTextArea desc = new RichTextArea("Desc");
-    TextField weight = new MTextField("Weight");
-    DateField expirationDate = new DateField("Expiration date");
-    CheckBox flag = new CheckBox("Flag");
-
-    OfferForm(OfferRepository r, EventBus.UIEventBus b) {
-        super(Offer.class);
-        this.repo = r;
-        this.eventBus = b;
-
-        setSavedHandler(offer -> {
-            repo.save(offer);
-            eventBus.publish(this, new OfferModifiedEvent(offer));
-        });
-        setResetHandler(offer -> eventBus.publish(this, new OfferModifiedEvent(offer)));
-        setSizeUndefined();
+    public OfferForm(OfferRepository r, EventBus.UIEventBus b) {
+        super(b, Offer.class);
+        repo = r;
     }
 
     @Override
@@ -50,16 +39,12 @@ public class OfferForm extends AbstractForm<Offer> {
     }
 
     @Override
-    protected Component createContent() {
-        return new MVerticalLayout(
-                new MFormLayout(
-                        name,
-                        desc,
-                        weight,
-                        expirationDate,
-                        flag
-                ),
-                getToolbar()
-        );
+    public void save(Offer ent) {
+        repo.save(ent);
+    }
+
+    @Override
+    public FormLayout formLayout() {
+        return new MFormLayout(name, desc, weight, expirationDate, flag);
     }
 }
