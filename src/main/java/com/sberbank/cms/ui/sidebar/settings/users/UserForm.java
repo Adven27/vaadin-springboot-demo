@@ -1,8 +1,8 @@
 package com.sberbank.cms.ui.sidebar.settings.users;
 
-import com.sberbank.cms.backend.Role;
-import com.sberbank.cms.backend.UserInfo;
-import com.sberbank.cms.backend.UserRepository;
+import com.sberbank.cms.security.Role;
+import com.sberbank.cms.security.UserInfo;
+import com.sberbank.cms.security.UserRepository;
 import com.sberbank.cms.ui.common.forms.CommonForm;
 import com.vaadin.data.Converter;
 import com.vaadin.data.Result;

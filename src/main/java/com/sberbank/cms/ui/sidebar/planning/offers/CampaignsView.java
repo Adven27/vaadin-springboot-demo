@@ -1,8 +1,8 @@
 package com.sberbank.cms.ui.sidebar.planning.offers;
 
-import com.sberbank.cms.backend.Offer;
-import com.sberbank.cms.backend.OfferRepository;
-import com.sberbank.cms.ui.common.ModifiedEvent;
+import com.sberbank.cms.backend.content.Campaign;
+import com.sberbank.cms.backend.content.CampaignRepository;
+import com.sberbank.cms.backend.content.ContentKindRepository;
 import com.sberbank.cms.ui.sidebar.Sections;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
@@ -11,7 +11,9 @@ import com.vaadin.shared.data.sort.SortDirection;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.ViewScope;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.access.annotation.Secured;
@@ -27,63 +29,63 @@ import org.vaadin.viritin.grid.MGrid;
 import org.vaadin.viritin.layouts.MHorizontalLayout;
 import org.vaadin.viritin.layouts.MVerticalLayout;
 
-import java.util.List;
-
-import static com.sberbank.cms.backend.Role.ROLE_ADMIN;
-import static com.sberbank.cms.backend.Role.ROLE_OFFICER;
-import static com.vaadin.icons.VaadinIcons.SHOP;
+import static com.sberbank.cms.security.Role.ROLE_ADMIN;
+import static com.sberbank.cms.security.Role.ROLE_OFFICER;
+import static com.vaadin.icons.VaadinIcons.*;
+import static com.vaadin.ui.Grid.SelectionMode.NONE;
 
 @Secured({ROLE_ADMIN, ROLE_OFFICER})
-@SpringView(name = OffersView.VIEW_NAME)
-@SideBarItem(sectionId = Sections.PLANNING, caption = "Offers", order = 1)
+@SpringView(name = CampaignsView.VIEW_NAME)
+@SideBarItem(sectionId = Sections.PLANNING, caption = "Campaigns", order = 1)
 @VaadinFontIcon(SHOP)
 @ViewScope
-public class OffersView extends VerticalLayout implements View {
-    public static final String VIEW_NAME = "";//default view
+public class CampaignsView extends VerticalLayout implements View {
+    public static final String VIEW_NAME = "campaigns";
     private static final long serialVersionUID = 2217814051618370412L;
 
-    private final OfferRepository repo;
-    private final OfferForm offerForm;
+    private final CampaignRepository repo;
+    private final ContentKindRepository kindRepo;
     private final EventBus.UIEventBus eventBus;
+    private CampaignForm form;
 
-    private MGrid<Offer> list = new MGrid<>(Offer.class)
-            .withProperties("id", "name", "desc", "weight", "expirationDate", "flag")
-            .withColumnHeaders("id", "Name", "Desc", "Weight", "Expire", "Flag")
+    private MGrid<Campaign> list = new MGrid<>(Campaign.class)
+            .withProperties("id", "contentKind", "data")
+            .withColumnHeaders("id", "Kind", "Data")
             .withFullSize();
 
     private MTextField filterByName = new MTextField().withPlaceholder("Filter by name");
-    private Button addNew = new MButton(VaadinIcons.PLUS, this::add);
-    private Button edit = new MButton(VaadinIcons.PENCIL, this::edit);
-    private Button delete = new ConfirmButton(VaadinIcons.TRASH, "Are you sure you want to delete the entry?", this::remove);
+    private Button addNew = new MButton(VaadinIcons.PLUS, click -> edit(new Campaign()));
 
-    public OffersView(OfferRepository repo, OfferForm offerForm, EventBus.UIEventBus eventBus) {
+    public CampaignsView(CampaignRepository repo, EventBus.UIEventBus eventBus, ContentKindRepository kindRepo) {
         this.repo = repo;
-        this.offerForm = offerForm;
+        this.kindRepo = kindRepo;
         this.eventBus = eventBus;
     }
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
+        list.setSelectionMode(NONE);
+        list.addComponentColumn(campaign -> new HorizontalLayout(
+                        new MButton(PENCIL, click -> edit(campaign)),
+                        new ConfirmButton(TRASH, "Are you sure you want to delete the entry?", () -> {
+                            repo.delete(campaign);
+                            listEntities();
+                        })
+                )
+        );
         addComponent(
                 new MVerticalLayout(
-                        new MHorizontalLayout(filterByName, addNew, edit, delete).expand(filterByName)
+                        new MHorizontalLayout(filterByName, addNew).expand(filterByName)
                 ).expand(
                         new MHorizontalLayout().expand(list)
                 )
         );
         listEntities();
 
-        list.asSingleSelect().addValueChangeListener(e -> adjustActionButtonState());
         filterByName.addValueChangeListener(e -> listEntities(e.getValue()));
 
         eventBus.subscribe(this);
         setSizeFull();
-    }
-
-    private void adjustActionButtonState() {
-        boolean hasSelection = !list.getSelectedItems().isEmpty();
-        edit.setEnabled(hasSelection);
-        delete.setEnabled(hasSelection);
     }
 
     private void listEntities() {
@@ -95,7 +97,7 @@ public class OffersView extends VerticalLayout implements View {
 
         list.setDataProvider(
                 (sort, offset, limit) -> {
-                    final List<Offer> page = repo.findByNameLikeIgnoreCase(likeFilter,
+                    final Page<Campaign> page = repo.findAll(
                             new PageRequest(
                                     offset / limit,
                                     limit,
@@ -104,35 +106,21 @@ public class OffersView extends VerticalLayout implements View {
                                     sort.isEmpty() ? "id" : sort.get(0).getSorted()
                             )
                     );
-                    return page.subList(offset % limit, page.size()).stream();
+                    return page.getContent().stream();
                 },
-                () -> (int) repo.countByNameLike(likeFilter)
+                () -> (int) repo.count()
         );
-        adjustActionButtonState();
     }
 
-    private void add(Button.ClickEvent clickEvent) {
-        edit(new Offer());
-    }
-
-    private void edit(Button.ClickEvent e) {
-        edit(list.asSingleSelect().getValue());
-    }
-
-    private void edit(final Offer phoneBookEntry) {
-        offerForm.setEntity(phoneBookEntry);
-        offerForm.openInModalPopup();
-    }
-
-    private void remove() {
-        repo.delete(list.asSingleSelect().getValue());
-        list.deselectAll();
-        listEntities();
+    private void edit(final Campaign campaign) {
+        form = new CampaignForm(repo, kindRepo, eventBus);
+        form.setEntity(campaign);
+        form.openInModalPopup();
     }
 
     @EventBusListenerMethod(scope = EventScope.UI)
-    public void onPersonModified(ModifiedEvent event) {
+    public void onModified(Campaign event) {
         listEntities();
-        offerForm.closePopup();
+        form.closePopup();
     }
 }

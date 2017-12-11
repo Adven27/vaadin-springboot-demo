@@ -1,7 +1,5 @@
 package com.sberbank.cms.security;
 
-import com.sberbank.cms.backend.UserInfo;
-import com.sberbank.cms.backend.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;

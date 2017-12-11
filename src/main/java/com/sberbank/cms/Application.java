@@ -1,27 +1,24 @@
 package com.sberbank.cms;
 
-import com.sberbank.cms.backend.Role;
-import com.sberbank.cms.backend.UserInfo;
-import com.sberbank.cms.backend.UserRepository;
+import com.sberbank.cms.backend.content.*;
+import com.sberbank.cms.security.Role;
+import com.sberbank.cms.security.UserInfo;
+import com.sberbank.cms.security.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.vaadin.spring.security.annotation.EnableVaadinSharedSecurity;
 import org.vaadin.spring.sidebar.annotation.EnableSideBar;
+
+import java.util.Date;
+import java.util.List;
+
+import static com.sberbank.cms.backend.content.FieldType.*;
+import static java.util.Arrays.asList;
+import static java.util.Collections.singletonMap;
 
 @EnableSideBar
 @SpringBootApplication
@@ -32,71 +29,61 @@ public class Application {
         SpringApplication.run(Application.class, args);
     }
 
-    @EnableWebSecurity
-    @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true, proxyTargetClass = true)
-    @EnableVaadinSharedSecurity
-    @Configuration
-    public static class SecurityConfig extends WebSecurityConfigurerAdapter {
-        private static final String LOGIN_URL = "/login.html";
-        private static final String LOGIN_PROCESSING_URL = "/login";
-
-        @Autowired
-        private UserDetailsService userDetailsService;
-        @Autowired
-        private PasswordEncoder passwordEncoder;
-
-        @Override
-        protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-            super.configure(auth);
-            auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
-//        auth.inMemoryAuthentication().withUser("a").password("a").roles("admin");
-        }
-
-        @Override
-        protected void configure(HttpSecurity http) throws Exception {
-            http.csrf().disable().
-                authorizeRequests().
-                    anyRequest().hasAnyRole(Role.ALL).
-                    and().
-                formLogin().
-                    loginPage(LOGIN_URL).
-                    loginProcessingUrl(LOGIN_PROCESSING_URL).
-                    permitAll();
-        }
-
-        @Override
-        public void configure(WebSecurity web) throws Exception {
-            web.ignoring().antMatchers("/VAADIN/**");
-        }
-
-        @Bean
-        public PasswordEncoder passwordEncoder() {
-            return new BCryptPasswordEncoder();
-        }
-    }
 
     @Bean
-    public CommandLineRunner loadData(UserRepository repo, PasswordEncoder passEncoder) {
+    public CommandLineRunner loadData(UserRepository repo, PasswordEncoder passEncoder,
+                                      CampaignRepository campaignRepo, ContentKindRepository kindRepo) {
         return (args) -> {
-            final String op = "op";
-            final String admin = "admin";
-            repo.save(new UserInfo(admin, admin, passEncoder.encode(admin), Role.ADMIN));
-            repo.save(new UserInfo(op, "officer", passEncoder.encode(op), Role.OFFICER));
-
-            LOG.info("Customers found with findAll():");
-            LOG.info("-------------------------------");
-            for (UserInfo user : repo.findAll()) {
-                LOG.info(user.toString());
-            }
-            LOG.info("");
-
-            LOG.info("Customer found with findByLastNameStartsWithIgnoreCase('" + op + "'):");
-            LOG.info("--------------------------------------------");
-            for (UserInfo test : repo
-                    .findByLoginLikeIgnoreCaseOrNameLikeIgnoreCase(op, op)) {
-                LOG.info(test.toString());
-            }
-            LOG.info("");
+            addUsers(repo, passEncoder);
+            addCampaigns(campaignRepo, kindRepo);
         };
+    }
+
+    private void addUsers(UserRepository repo, PasswordEncoder passEncoder) {
+        final String op = "op";
+        final String admin = "admin";
+        repo.save(new UserInfo(admin, admin, passEncoder.encode(admin), Role.ADMIN));
+        repo.save(new UserInfo(op, "officer", passEncoder.encode(op), Role.OFFICER));
+
+        LOG.info("Customers found with findAll():");
+        LOG.info("-------------------------------");
+        for (UserInfo user : repo.findAll()) {
+            LOG.info(user.toString());
+        }
+        LOG.info("");
+
+        LOG.info("Customer found with findByLastNameStartsWithIgnoreCase('" + op + "'):");
+        LOG.info("--------------------------------------------");
+        for (UserInfo test : repo
+                .findByLoginLikeIgnoreCaseOrNameLikeIgnoreCase(op, op)) {
+            LOG.info(test.toString());
+        }
+        LOG.info("");
+    }
+
+    private void addCampaigns(CampaignRepository campaignRepo, ContentKindRepository kindRepo) {
+        ContentKind kind = kind();
+        kindRepo.save(kind);
+        campaignRepo.save(Campaign.builder().contentKind(kind).data(singletonMap("text field", "some value")).build());
+
+        LOG.info("Campaign found with findByContentKind('" + kind + "'):");
+        LOG.info("--------------------------------------------");
+        for (Campaign test : campaignRepo.findByContentKind(kind.getStrId())) {
+            LOG.info(test.toString());
+        }
+        LOG.info("");
+    }
+
+    private ContentKind kind() {
+        ContentKind kind = ContentKind.builder().strId("offer").name("Offers").creationDate(new Date()).build();
+        ContentField.ContentFieldBuilder builder = ContentField.builder().contentKind(kind);
+        List<ContentField> fields = asList(
+                builder.name("text field").type(TEXT).build(),
+                builder.name("rich field").type(RICH_TEXT).build(),
+                builder.name("bool field").type(BOOL).build(),
+                builder.name("date field").type(DATE).build()
+        );
+        kind.setFields(fields);
+        return kind;
     }
 }

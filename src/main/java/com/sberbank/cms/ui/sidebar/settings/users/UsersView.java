@@ -1,14 +1,12 @@
 package com.sberbank.cms.ui.sidebar.settings.users;
 
-import com.sberbank.cms.backend.Role;
-import com.sberbank.cms.backend.UserInfo;
-import com.sberbank.cms.backend.UserRepository;
-import com.sberbank.cms.ui.common.ModifiedEvent;
+import com.sberbank.cms.security.Role;
+import com.sberbank.cms.security.UserInfo;
+import com.sberbank.cms.security.UserRepository;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.spring.annotation.SpringView;
-import com.vaadin.spring.annotation.ViewScope;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.VerticalLayout;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +30,6 @@ import static com.vaadin.icons.VaadinIcons.USERS;
 @SpringView(name = UsersView.VIEW_NAME)
 @SideBarItem(sectionId = SETTINGS, caption = "Users", order = 1)
 @VaadinFontIcon(USERS)
-@ViewScope
 public class UsersView extends VerticalLayout implements View {
     public static final String VIEW_NAME = "users";
     private static final long serialVersionUID = 2217814051618370412L;
@@ -107,7 +104,7 @@ public class UsersView extends VerticalLayout implements View {
     }
 
     @EventBusListenerMethod(scope = EventScope.UI)
-    public void onPersonModified(ModifiedEvent event) {
+    public void onModified(UserInfo event) {
         listEntities();
         userForm.closePopup();
     }

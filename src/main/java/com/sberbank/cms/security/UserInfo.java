@@ -1,4 +1,4 @@
-package com.sberbank.cms.backend;
+package com.sberbank.cms.security;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -6,12 +6,15 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 import java.util.Objects;
 
 @NoArgsConstructor
 @Data
 @Entity
-public class UserInfo {
+public class UserInfo implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;

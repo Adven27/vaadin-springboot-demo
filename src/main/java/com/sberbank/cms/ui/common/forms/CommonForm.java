@@ -1,6 +1,5 @@
 package com.sberbank.cms.ui.common.forms;
 
-import com.sberbank.cms.ui.common.ModifiedEvent;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.FormLayout;
 import org.vaadin.spring.events.EventBus;
@@ -18,9 +17,9 @@ public abstract class CommonForm<T> extends AbstractForm<T> {
 
         setSavedHandler(ent -> {
             save(ent);
-            eventBus.publish(this, new ModifiedEvent(ent));
+            eventBus.publish(this, ent);
         });
-        setResetHandler(ent -> eventBus.publish(this, new ModifiedEvent(ent)));
+        setResetHandler(ent -> eventBus.publish(this, ent));
         setSizeUndefined();
     }
 

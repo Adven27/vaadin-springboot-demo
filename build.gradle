@@ -40,6 +40,8 @@ dependencies {
 	compile("org.springframework.boot:spring-boot-starter-data-rest")
 	compile("org.springframework.boot:spring-boot-starter-security")
 	compile("org.springframework.boot:spring-boot-devtools")
+	compile("com.google.code.gson:gson:2.8.2")
+
 	//FIXME
 	compile("org.glassfish.web:el-impl:2.2")
 	//compile("org.springframework.boot:spring-boot-starter-actuator")
@@ -48,7 +50,9 @@ dependencies {
 	compile('org.vaadin.spring.addons:vaadin-spring-addon-eventbus:2.0.0.RELEASE')
 	compile('org.vaadin.spring.addons:vaadin-spring-addon-sidebar:2.0.0.RELEASE')
 	compile("org.vaadin:viritin:2.1")
-	runtime("com.h2database:h2")
+	compile('org.liquibase:liquibase-core')
+	compile('org.postgresql:postgresql:42.1.4')
+	//runtime("com.h2database:h2")
 	testCompile("junit:junit")
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 }

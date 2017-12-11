@@ -1,4 +1,4 @@
-package com.sberbank.cms.backend;
+package com.sberbank.cms.security;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
