@@ -35,7 +35,8 @@ public class Application {
                                       CampaignRepository campaignRepo, ContentKindRepository kindRepo) {
         return (args) -> {
             addUsers(repo, passEncoder);
-            addCampaigns(campaignRepo, kindRepo);
+            addCampaigns(campaignRepo, kindRepo, "offer");
+            addCampaigns(campaignRepo, kindRepo, "vector");
         };
     }
 
@@ -61,8 +62,8 @@ public class Application {
         LOG.info("");
     }
 
-    private void addCampaigns(CampaignRepository campaignRepo, ContentKindRepository kindRepo) {
-        ContentKind kind = kind();
+    private void addCampaigns(CampaignRepository campaignRepo, ContentKindRepository kindRepo, String name) {
+        ContentKind kind = kind(name);
         kindRepo.save(kind);
         campaignRepo.save(Campaign.builder().contentKind(kind).data(singletonMap("text field", "some value")).build());
 
@@ -74,8 +75,8 @@ public class Application {
         LOG.info("");
     }
 
-    private ContentKind kind() {
-        ContentKind kind = ContentKind.builder().strId("offer").name("Offers").creationDate(new Date()).build();
+    private ContentKind kind(String name) {
+        ContentKind kind = ContentKind.builder().strId(name).name(name + "s").creationDate(new Date()).build();
         ContentField.ContentFieldBuilder builder = ContentField.builder().contentKind(kind);
         List<ContentField> fields = asList(
                 builder.name("text field").type(TEXT).build(),

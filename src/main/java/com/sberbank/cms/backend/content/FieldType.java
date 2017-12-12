@@ -60,7 +60,7 @@ public enum FieldType {
 
         @Override
         public Object convertToPresentation(Object value, ValueContext context) {
-            return value == null ? LocalDate.now() : LocalDate.parse(value.toString());
+            return value == null ? null : LocalDate.parse(value.toString());
         }
     }
 

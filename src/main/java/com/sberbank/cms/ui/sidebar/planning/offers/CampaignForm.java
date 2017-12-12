@@ -13,6 +13,11 @@ import org.vaadin.spring.events.EventBus;
 import org.vaadin.viritin.layouts.MFormLayout;
 import org.vaadin.viritin.layouts.MVerticalLayout;
 
+import java.util.List;
+
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toMap;
+
 public class CampaignForm extends CommonForm<Campaign> {
     private static final long serialVersionUID = 1L;
 
@@ -28,6 +33,12 @@ public class CampaignForm extends CommonForm<Campaign> {
 
     @Override
     public void save(Campaign ent) {
+        List<String> meta = ent.getContentKind().getFields().stream().map(field -> field.getName()).collect(toList());
+        ent.setData(
+                ent.getData().entrySet().stream().
+                        filter(entry -> meta.contains(entry.getKey())).
+                        collect(toMap(p -> p.getKey(), p -> p.getValue()))
+        );
         campaignRepo.save(ent);
     }
 
