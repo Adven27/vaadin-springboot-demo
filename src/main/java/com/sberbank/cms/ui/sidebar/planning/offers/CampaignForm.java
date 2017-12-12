@@ -1,9 +1,6 @@
 package com.sberbank.cms.ui.sidebar.planning.offers;
 
-import com.sberbank.cms.backend.content.Campaign;
-import com.sberbank.cms.backend.content.CampaignRepository;
-import com.sberbank.cms.backend.content.ContentKind;
-import com.sberbank.cms.backend.content.ContentKindRepository;
+import com.sberbank.cms.backend.content.*;
 import com.sberbank.cms.ui.common.forms.CommonForm;
 import com.vaadin.ui.AbstractField;
 import com.vaadin.ui.ComboBox;
@@ -14,6 +11,7 @@ import org.vaadin.viritin.layouts.MFormLayout;
 import org.vaadin.viritin.layouts.MVerticalLayout;
 
 import java.util.List;
+import java.util.Map;
 
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
@@ -33,11 +31,11 @@ public class CampaignForm extends CommonForm<Campaign> {
 
     @Override
     public void save(Campaign ent) {
-        List<String> meta = ent.getContentKind().getFields().stream().map(field -> field.getName()).collect(toList());
+        List<String> kindFields = ent.getContentKind().getFields().stream().map(ContentField::getName).collect(toList());
         ent.setData(
                 ent.getData().entrySet().stream().
-                        filter(entry -> meta.contains(entry.getKey())).
-                        collect(toMap(p -> p.getKey(), p -> p.getValue()))
+                        filter(entry -> kindFields.contains(entry.getKey())).
+                        collect(toMap(Map.Entry::getKey, Map.Entry::getValue))
         );
         campaignRepo.save(ent);
     }
