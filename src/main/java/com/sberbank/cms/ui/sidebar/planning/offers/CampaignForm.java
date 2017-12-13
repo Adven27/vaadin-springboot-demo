@@ -46,6 +46,7 @@ public class CampaignForm extends CommonForm<Campaign> {
     }
 
     private void refreshFieldsFor(ContentKind kind) {
+        //FIXME bindings are cleared only after form closing
         fieldsContainer.removeAllComponents();
         if (kind != null) {
             fieldsContainer.addComponents(
@@ -54,11 +55,14 @@ public class CampaignForm extends CommonForm<Campaign> {
                             toArray(AbstractField[]::new)
             );
         }
+        if (getPopup() != null) {
+            getPopup().center();
+        }
     }
 
     private ComboBox<ContentKind> kindComboBox() {
         ComboBox<ContentKind> cb = new ComboBox<>("Kind", kindRepo.findAll());
-        cb.setEmptySelectionAllowed(true);
+        cb.setEmptySelectionAllowed(false);
         cb.addValueChangeListener(event -> refreshFieldsFor(event.getValue()));
         cb.setItemCaptionGenerator(ContentKind::getStrId);
         cb.focus();
