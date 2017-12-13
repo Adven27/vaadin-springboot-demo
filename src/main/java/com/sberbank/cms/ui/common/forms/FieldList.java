@@ -28,8 +28,9 @@ public class FieldList extends CustomField<List<ContentField>> {
         fields.setSelectionMode(NONE);
         fields.getEditor().setEnabled(true).setBuffered(true);//.setErrorGenerator((fieldToColumn, status) -> "!!!!!ERRROR\n" + fieldToColumn + status);
         fields.addComponentColumn(field -> new MButton(TRASH, click -> {
-            value.remove(field);
-            updateFields();
+            List newVal = new ArrayList(value);
+            newVal.remove(field);
+            setValue(newVal);
         }));
 
 
@@ -37,7 +38,7 @@ public class FieldList extends CustomField<List<ContentField>> {
         Binder<ContentField> binder = fields.getEditor().getBinder();
         Binder.Binding<ContentField, String> doneBinding = binder.
                 //withValidator(contentField -> contentField.getName().length() > 3,"ERRR").
-                bind(new TextField(), "name");
+                        bind(new TextField(), "name");
 
         fields.getColumn("name").setEditorBinding(doneBinding);
         fields.getColumn("type").setEditorComponent(new ComboBox<>("Type", asList(FieldType.values())));
@@ -53,6 +54,9 @@ public class FieldList extends CustomField<List<ContentField>> {
     @Override
     protected void doSetValue(List<ContentField> value) {
         this.value = value;
+        if (owner != null) {
+            owner.setFields(value);
+        }
         updateFields();
     }
 
@@ -66,9 +70,10 @@ public class FieldList extends CustomField<List<ContentField>> {
         field.setContentKind(owner);
         field.setType(FieldType.TEXT);
         field.setName("new field");
-        value.add(field);
-        owner.setFields(value);
-        updateFields();
+
+        List newVal = new ArrayList(value);
+        newVal.add(field);
+        setValue(newVal);
     }
 
     public void owner(ContentKind owner) {
