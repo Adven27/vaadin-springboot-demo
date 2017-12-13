@@ -52,6 +52,10 @@ dependencies {
 	compile("org.vaadin:viritin:2.1")
 	compile('org.liquibase:liquibase-core')
 	compile('org.postgresql:postgresql:42.1.4')
+
+	compile group: 'org.testcontainers', name: 'testcontainers', version: '1.5.0'
+	compile group: 'org.testcontainers', name: 'postgresql', version: '1.5.0'
+
 	//runtime("com.h2database:h2")
 	testCompile("junit:junit")
 	testCompile('org.springframework.boot:spring-boot-starter-test')
