@@ -1,1 +1,1 @@
-web: java $JAVA_OPTS -Dserver.port=$PORT -jar build/libs/*.jar -Dspring.profiles.active=prod
+web: java $JAVA_OPTS -Dserver.port=$PORT -Dspring.datasource.driver-class-name=org.postgresql.Driver -Dspring.profiles.active=prod -jar build/libs/*.jar
