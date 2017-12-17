@@ -18,3 +18,8 @@ CREATE TABLE campaign (
   kind TEXT NOT NULL REFERENCES content_kind (str_id),
   data JSONB
 );
+
+CREATE TABLE place (
+  id   INTEGER PRIMARY KEY,
+  name TEXT NOT NULL
+);

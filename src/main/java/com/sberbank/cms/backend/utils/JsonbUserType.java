@@ -39,10 +39,10 @@ public class JsonbUserType implements UserType {
             return null;
         }
 
-        Map<String, String> resultMap = new HashMap<>();
+        Map<String, Object> resultMap = new HashMap<>();
 
         Map<?, ?> tempMap = (Map<?, ?>) originalValue;
-        tempMap.forEach((key, value) -> resultMap.put((String) key, (String) value));
+        tempMap.forEach((key, value) -> resultMap.put((String) key, value));
 
         return resultMap;
     }

@@ -31,7 +31,7 @@ public class Campaign implements Serializable {
 
     @NotNull
     @Type(type = "JsonbUserType")
-    Map<String, String> data = new HashMap<>();
+    Map<String, Object> data = new HashMap<>();
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "content_kind_str_id")

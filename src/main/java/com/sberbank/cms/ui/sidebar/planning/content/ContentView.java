@@ -23,7 +23,7 @@ import static com.vaadin.icons.VaadinIcons.WRENCH;
 
 @Secured({ROLE_ADMIN, ROLE_OFFICER})
 @SpringView(name = ContentView.VIEW_NAME)
-@SideBarItem(sectionId = Sections.PLANNING, caption = "Content", order = 1)
+@SideBarItem(sectionId = Sections.PLANNING, caption = "Content", order = 3)
 @VaadinFontIcon(WRENCH)
 @ViewScope
 public class ContentView extends VerticalLayout implements View {

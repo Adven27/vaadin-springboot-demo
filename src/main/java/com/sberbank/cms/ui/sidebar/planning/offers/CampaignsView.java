@@ -3,6 +3,7 @@ package com.sberbank.cms.ui.sidebar.planning.offers;
 import com.sberbank.cms.backend.content.Campaign;
 import com.sberbank.cms.backend.content.CampaignRepository;
 import com.sberbank.cms.backend.content.ContentKindRepository;
+import com.sberbank.cms.backend.content.PlaceRepository;
 import com.sberbank.cms.ui.common.forms.CustomGrid;
 import com.sberbank.cms.ui.sidebar.Sections;
 import com.vaadin.navigator.View;
@@ -37,12 +38,14 @@ public class CampaignsView extends VerticalLayout implements View {
 
     private final CampaignRepository repo;
     private final ContentKindRepository kindRepo;
+    private final PlaceRepository placeRepo;
     private final EventBus.UIEventBus eventBus;
 
-    public CampaignsView(CampaignRepository repo, EventBus.UIEventBus eventBus, ContentKindRepository kindRepo) {
+    public CampaignsView(CampaignRepository repo, EventBus.UIEventBus eventBus, ContentKindRepository kindRepo, PlaceRepository placeRepo) {
         this.repo = repo;
         this.kindRepo = kindRepo;
         this.eventBus = eventBus;
+        this.placeRepo = placeRepo;
     }
 
     @Override
@@ -89,7 +92,7 @@ public class CampaignsView extends VerticalLayout implements View {
 
             @Override
             protected AbstractForm form() {
-                return new CampaignForm(repo, kindRepo, eventBus);
+                return new CampaignForm(repo, kindRepo, eventBus, placeRepo);
             }
         });
     }

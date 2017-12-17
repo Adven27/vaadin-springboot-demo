@@ -14,11 +14,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.vaadin.spring.sidebar.annotation.EnableSideBar;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Stream;
 
 import static com.sberbank.cms.backend.content.FieldType.*;
 import static java.util.Arrays.asList;
-import static java.util.Collections.singletonMap;
+import static java.util.stream.Collectors.toList;
 
 @EnableSideBar
 @SpringBootApplication
@@ -29,14 +32,15 @@ public class Application {
         SpringApplication.run(Application.class, args);
     }
 
-
     @Bean
     public CommandLineRunner loadData(UserRepository repo, PasswordEncoder passEncoder,
-                                      CampaignRepository campaignRepo, ContentKindRepository kindRepo) {
+                                      CampaignRepository campaignRepo, ContentKindRepository kindRepo,
+                                      PlaceRepository placeRepo) {
         return (args) -> {
             addUsers(repo, passEncoder);
+            addPlaces(placeRepo, "place 1", "place 2");
             addCampaigns(campaignRepo, kindRepo, "offer");
-            addCampaigns(campaignRepo, kindRepo, "vector");
+            addCampaigns(campaignRepo, kindRepo, "vector", "place 1", "place 2");
         };
     }
 
@@ -48,30 +52,36 @@ public class Application {
 
         LOG.info("Customers found with findAll():");
         LOG.info("-------------------------------");
-        for (UserInfo user : repo.findAll()) {
-            LOG.info(user.toString());
-        }
+        repo.findAll().forEach(user -> LOG.info(user.toString()));
         LOG.info("");
 
         LOG.info("Customer found with findByLastNameStartsWithIgnoreCase('" + op + "'):");
         LOG.info("--------------------------------------------");
-        for (UserInfo test : repo
-                .findByLoginLikeIgnoreCaseOrNameLikeIgnoreCase(op, op)) {
-            LOG.info(test.toString());
-        }
+        repo.findByLoginLikeIgnoreCaseOrNameLikeIgnoreCase(op, op).forEach(user -> LOG.info(user.toString()));
         LOG.info("");
     }
 
-    private void addCampaigns(CampaignRepository campaignRepo, ContentKindRepository kindRepo, String name) {
+    private void addCampaigns(CampaignRepository campaignRepo, ContentKindRepository kindRepo, String name, String... places) {
         ContentKind kind = kind(name);
         kindRepo.save(kind);
-        campaignRepo.save(Campaign.builder().contentKind(kind).data(singletonMap("text field", "some value")).build());
+        Map<String, Object> data = new HashMap<>();
+        data.put("text field", "some value");
+        data.put("places", asList(places));
+
+        campaignRepo.save(Campaign.builder().contentKind(kind).data(data).build());
 
         LOG.info("Campaign found with findByContentKind('" + kind + "'):");
         LOG.info("--------------------------------------------");
-        for (Campaign test : campaignRepo.findByContentKind(kind.getStrId())) {
-            LOG.info(test.toString());
-        }
+        campaignRepo.findByContentKind(kind.getStrId()).forEach(campaign -> LOG.info(campaign.toString()));
+        LOG.info("");
+    }
+
+    private void addPlaces(PlaceRepository repo, String... names) {
+        repo.save(Stream.of(names).map(Place::new).collect(toList()));
+
+        LOG.info("Places found with findAllNames():");
+        LOG.info("--------------------------------------------");
+        repo.findAllNames().forEach(LOG::info);
         LOG.info("");
     }
 

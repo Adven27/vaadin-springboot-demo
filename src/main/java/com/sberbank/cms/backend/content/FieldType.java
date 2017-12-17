@@ -34,7 +34,7 @@ public enum FieldType {
 
     private Setter<Campaign, Object> setter(Component component) {
         return (campaign, val) -> {
-            Map<String, String> data = campaign.getData();
+            Map<String, Object> data = campaign.getData();
             data.put(component.getCaption(), val.toString());
             campaign.setData(data);
         };
