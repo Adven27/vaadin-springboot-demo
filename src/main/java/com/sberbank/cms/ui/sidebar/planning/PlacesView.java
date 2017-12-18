@@ -2,6 +2,7 @@ package com.sberbank.cms.ui.sidebar.planning;
 
 import com.sberbank.cms.backend.content.Place;
 import com.sberbank.cms.backend.content.PlaceRepository;
+import com.sberbank.cms.ui.common.forms.AddButton;
 import com.sberbank.cms.ui.sidebar.Sections;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
@@ -10,7 +11,6 @@ import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.ViewScope;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.themes.ValoTheme;
 import org.vaadin.spring.sidebar.annotation.SideBarItem;
 import org.vaadin.spring.sidebar.annotation.VaadinFontIcon;
 import org.vaadin.viritin.button.MButton;
@@ -18,8 +18,8 @@ import org.vaadin.viritin.fields.MTextField;
 import org.vaadin.viritin.grid.MGrid;
 import org.vaadin.viritin.layouts.MHorizontalLayout;
 
-import static com.vaadin.event.ShortcutAction.KeyCode.ENTER;
-import static com.vaadin.icons.VaadinIcons.*;
+import static com.vaadin.icons.VaadinIcons.TAGS;
+import static com.vaadin.icons.VaadinIcons.TRASH;
 import static com.vaadin.ui.Alignment.BOTTOM_CENTER;
 import static com.vaadin.ui.Grid.SelectionMode.NONE;
 
@@ -41,7 +41,7 @@ public class PlacesView extends VerticalLayout implements View {
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
-        MButton add = new MButton(PLUS, click -> add()).withStyleName(ValoTheme.BUTTON_PRIMARY).withClickShortcut(ENTER);
+        MButton add = new AddButton(click -> add());
         name = new MTextField("", input -> add.setEnabled(input.getValue().length() > 0)).withPlaceholder("Place...");
         configureGrid();
 

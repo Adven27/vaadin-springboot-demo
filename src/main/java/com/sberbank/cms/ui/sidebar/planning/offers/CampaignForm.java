@@ -23,7 +23,7 @@ public class CampaignForm extends CommonForm<Campaign> {
     private final CampaignRepository campaignRepo;
     private final ContentKindRepository kindRepo;
     private final PlaceRepository placeRepo;
-    private final VerticalLayout fieldsContainer = new MVerticalLayout();
+    private final MFormLayout fieldsContainer = new MFormLayout().withFullSize().withMargin(false);
     private final ListSelect<String> places = new ListSelect<>();
 
     public CampaignForm(CampaignRepository campaignRepo, ContentKindRepository kindRepo, EventBus.UIEventBus b, PlaceRepository placeRepo) {
@@ -45,9 +45,12 @@ public class CampaignForm extends CommonForm<Campaign> {
     }
 
     @Override
-    public FormLayout formLayout() {
+    public Layout formLayout() {
         configurePlaces();
-        return new MFormLayout(kindComboBox(), places, fieldsContainer);
+        return new MVerticalLayout(
+                new MFormLayout(kindComboBox(), places).withFullSize().withMargin(false),
+                fieldsContainer
+        );
     }
 
     private void configurePlaces() {
@@ -87,6 +90,7 @@ public class CampaignForm extends CommonForm<Campaign> {
         cb.setEmptySelectionAllowed(false);
         cb.addValueChangeListener(event -> refreshFieldsFor(event.getValue()));
         cb.setItemCaptionGenerator(ContentKind::getStrId);
+        cb.setSizeFull();
         cb.focus();
         getBinder().bind(cb, Campaign::getContentKind, Campaign::setContentKind);
         return cb;

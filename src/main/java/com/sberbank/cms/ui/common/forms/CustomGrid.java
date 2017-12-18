@@ -1,6 +1,5 @@
 package com.sberbank.cms.ui.common.forms;
 
-import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
@@ -17,6 +16,7 @@ import org.vaadin.viritin.layouts.MVerticalLayout;
 
 import static com.vaadin.icons.VaadinIcons.PENCIL;
 import static com.vaadin.icons.VaadinIcons.TRASH;
+import static com.vaadin.ui.Alignment.BOTTOM_CENTER;
 import static com.vaadin.ui.Grid.SelectionMode.NONE;
 
 public abstract class CustomGrid<T> extends CustomComponent {
@@ -42,7 +42,10 @@ public abstract class CustomGrid<T> extends CustomComponent {
         );
         setCompositionRoot(
                 new MVerticalLayout(
-                        new MHorizontalLayout(filterByName, new MButton(VaadinIcons.PLUS, click -> edit(addRow()))).expand(filterByName)
+                        new MHorizontalLayout(
+                                filterByName,
+                                new AddButton(click -> edit(addRow()))
+                        ).expand(filterByName).alignAll(BOTTOM_CENTER)
                 ).expand(
                         new MHorizontalLayout().expand(list)
                 )

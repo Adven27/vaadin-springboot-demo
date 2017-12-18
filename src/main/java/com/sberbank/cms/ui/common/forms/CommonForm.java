@@ -1,7 +1,7 @@
 package com.sberbank.cms.ui.common.forms;
 
 import com.vaadin.ui.Component;
-import com.vaadin.ui.FormLayout;
+import com.vaadin.ui.Layout;
 import org.vaadin.spring.events.EventBus;
 import org.vaadin.viritin.form.AbstractForm;
 import org.vaadin.viritin.layouts.MVerticalLayout;
@@ -33,5 +33,5 @@ public abstract class CommonForm<T> extends AbstractForm<T> {
 
     public abstract void save(T ent);
 
-    public abstract FormLayout formLayout();
+    public abstract Layout formLayout();
 }
