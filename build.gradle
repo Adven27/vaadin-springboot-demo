@@ -39,6 +39,8 @@ dependencies {
 	compile("org.springframework.boot:spring-boot-starter-data-jpa")
 	compile("org.springframework.boot:spring-boot-starter-data-rest")
 	compile("org.springframework.boot:spring-boot-starter-security")
+	compile("org.springframework.boot:spring-boot-starter-batch")
+	compile("org.springframework:spring-oxm:5.0.2.RELEASE")
 	compile("org.springframework.boot:spring-boot-devtools")
 	compile("com.google.code.gson:gson:2.8.2")
 
@@ -50,10 +52,10 @@ dependencies {
 	compile('org.vaadin.spring.addons:vaadin-spring-addon-eventbus:2.0.0.RELEASE')
 	compile('org.vaadin.spring.addons:vaadin-spring-addon-sidebar:2.0.0.RELEASE')
 	compile('org.liquibase:liquibase-core')
-	compile('org.postgresql:postgresql:42.1.4')
-
-	compile group: 'org.testcontainers', name: 'testcontainers', version: '1.5.0'
-	compile group: 'org.testcontainers', name: 'postgresql', version: '1.5.0'
+	compile('org.postgresql:postgresql:42.1.4')       
+	                                              
+	compile('org.testcontainers:testcontainers:1.5.0')
+	compile('org.testcontainers:postgresql:1.5.0')
 
 	compile fileTree(dir:'libs', includes: ['*.jar'])
 	//runtime("com.h2database:h2")
