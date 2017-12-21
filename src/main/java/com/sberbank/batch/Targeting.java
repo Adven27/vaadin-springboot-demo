@@ -4,16 +4,16 @@ import lombok.Data;
 import lombok.ToString;
 
 import java.util.Date;
-import java.util.Map;
+import java.util.List;
 
 @Data
 @ToString
 public class Targeting {
-    String сlient_id;
-    String template_id;
-    String model_id;
+    String client;
+    String combined_template_id;
+    String tip_id;
     Date start_datetime;
-    Date end_datetime;
+    Date expiration_datetime;
     Double weight;
-    Map<String, String> params;
+    List<Param> params;
 }

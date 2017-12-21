@@ -1,4 +1,4 @@
-package com.sberbank.batch;
+package com.sberbank.cms.configuration;
 
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecution;
@@ -8,22 +8,18 @@ import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
 import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
 import org.springframework.batch.core.repository.JobRestartException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
 
-@Component
+//@Component
 public class RunScheduler {
     private final JobLauncher jobLauncher;
     private final Job job;
 
-    @Autowired
     public RunScheduler(JobLauncher jobLauncher, Job job) {
         this.jobLauncher = jobLauncher;
         this.job = job;
     }
 
-    @Scheduled(cron = "${cron.job.expression}")
+    //@Scheduled(fixedRate = 2000)
     public void run() {
         try {
             JobExecution execution = jobLauncher.run(
