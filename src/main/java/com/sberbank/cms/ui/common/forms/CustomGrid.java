@@ -32,10 +32,10 @@ public abstract class CustomGrid<T> extends CustomComponent {
         list = grid();
         // A layout structure used for composition
         list.setSelectionMode(NONE);
-        list.addComponentColumn(campaign -> new HorizontalLayout(
-                        new MButton(PENCIL, click -> edit(campaign)),
+        list.addComponentColumn(row -> new HorizontalLayout(
+                        new MButton(PENCIL, click -> edit(row)),
                         new ConfirmButton(TRASH, "Are you sure you want to delete the entry?", () -> {
-                            deleteRow(campaign);
+                            delete(row);
                             listEntities();
                         })
                 )
@@ -44,7 +44,7 @@ public abstract class CustomGrid<T> extends CustomComponent {
                 new MVerticalLayout(
                         new MHorizontalLayout(
                                 filterByName,
-                                new AddButton(click -> edit(addRow()))
+                                new AddButton(click -> edit(create()))
                         ).expand(filterByName).alignAll(BOTTOM_CENTER)
                 ).expand(
                         new MHorizontalLayout().expand(list)
@@ -58,11 +58,11 @@ public abstract class CustomGrid<T> extends CustomComponent {
         setSizeFull();
     }
 
-    public abstract T addRow();
+    public abstract T create();
 
     public abstract MGrid<T> grid();
 
-    public abstract void deleteRow(T row);
+    public abstract void delete(T row);
 
     public abstract void listEntities(Grid<T> grid, String nameFilter);
 

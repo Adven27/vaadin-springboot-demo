@@ -44,12 +44,12 @@ public class ContentView extends VerticalLayout implements View {
     public void enter(ViewChangeListener.ViewChangeEvent event) {
         addComponent(new CustomGrid<ContentKind>(eventBus, ContentKind.class) {
             @Override
-            public ContentKind addRow() {
+            public ContentKind create() {
                 return new ContentKind();
             }
 
             @Override
-            public void deleteRow(ContentKind row) {
+            public void delete(ContentKind row) {
                 repo.delete(row);
             }
 

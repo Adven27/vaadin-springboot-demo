@@ -14,9 +14,13 @@ CREATE TABLE content_field (
 );
 
 CREATE TABLE campaign (
-  id   INTEGER PRIMARY KEY,
-  kind TEXT NOT NULL REFERENCES content_kind (str_id),
-  data JSONB
+  id         INTEGER PRIMARY KEY,
+  kind       TEXT NOT NULL REFERENCES content_kind (str_id),
+  data       JSONB,
+  name       TEXT NOT NULL,
+  start_date TIMESTAMP,
+  end_date   TIMESTAMP,
+  CHECK (name <> '')
 );
 
 CREATE TABLE place (

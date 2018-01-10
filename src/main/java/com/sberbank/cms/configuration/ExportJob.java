@@ -32,17 +32,6 @@ public class ExportJob {
         return new GenericApplicationContextFactory(TemplateExport.class);
     }
 
-    public static StaxWriterCallback footer(String tag) {
-        return wr -> {
-            try {
-                XMLEventFactory f = XMLEventFactory.newInstance();
-                wr.add(f.createEndElement("", "", tag));
-            } catch (XMLStreamException e) {
-                log.log(Level.SEVERE, "Error while writing file footer", e);
-            }
-        };
-    }
-
     public static StaxWriterCallback header(String tag) {
         return wr -> {
             try {
@@ -53,6 +42,17 @@ public class ExportJob {
                 wr.add(f.createStartElement("", "", tag));
             } catch (XMLStreamException e) {
                 log.log(Level.SEVERE, "Error while writing file header", e);
+            }
+        };
+    }
+
+    public static StaxWriterCallback footer(String tag) {
+        return wr -> {
+            try {
+                XMLEventFactory f = XMLEventFactory.newInstance();
+                wr.add(f.createEndElement("", "", tag));
+            } catch (XMLStreamException e) {
+                log.log(Level.SEVERE, "Error while writing file footer", e);
             }
         };
     }

@@ -1,7 +1,6 @@
 package com.sberbank.cms.configuration;
 
 import com.sberbank.batch.Param;
-import com.sberbank.batch.Targeting;
 import com.sberbank.cms.backend.content.Campaign;
 import lombok.extern.java.Log;
 import org.jetbrains.annotations.NotNull;
@@ -102,7 +101,7 @@ public class TemplateExport {
         XStreamMarshaller m = new XStreamMarshaller();
 
         Map<String, Class> aliases = new HashMap();
-        aliases.put("targeting", Targeting.class);
+        aliases.put("template", Campaign.class);
         aliases.put("param", Param.class);
         m.setAliases(aliases);
         return m;

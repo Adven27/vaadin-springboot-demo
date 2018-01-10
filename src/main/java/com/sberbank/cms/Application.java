@@ -68,7 +68,7 @@ public class Application {
         data.put("text field", "some value");
         data.put("places", asList(places));
 
-        campaignRepo.save(Campaign.builder().contentKind(kind).data(data).build());
+        campaignRepo.save(Campaign.builder().contentKind(kind).data(data).name(name).build());
 
         LOG.info("Campaign found with findByContentKind('" + kind + "'):");
         LOG.info("--------------------------------------------");
