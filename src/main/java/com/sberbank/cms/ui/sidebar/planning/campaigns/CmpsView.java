@@ -11,6 +11,7 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.themes.ValoTheme;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
@@ -78,7 +79,7 @@ public class CmpsView extends VerticalLayout implements View {
                         new MButton(
                                 kind.getName(),
                                 click -> getUI().getNavigator().navigateTo(VIEW_NAME + "/" + kind.getStrId())
-                        )
+                        ).withStyleName(kind.getStrId().equals(kindStrId) ? ValoTheme.BUTTON_PRIMARY : "")
                 )
         );
         return layout;
