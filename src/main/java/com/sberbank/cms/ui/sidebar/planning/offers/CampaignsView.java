@@ -49,13 +49,13 @@ public class CampaignsView extends VerticalLayout implements View {
 
     private Campaign campaign;
     private Binder<Campaign> binder;
-    private MTextField name = new MTextField("Name").withFullSize();
+    private MTextField name = new MTextField("Name").withFullWidth();
     private DateTimeField startDate = new DateTimeField("Start date", LocalDateTime.now());
     private final ListSelect<String> places = new ListSelect<>();
     private final Panel panel = new Panel();
-    private final Layout table = new MVerticalLayout().withFullSize().withMargin(false);
-    private final Layout commonFields = new MFormLayout().withFullSize();
-    private final Layout dataFields = new MFormLayout().withFullSize();
+    private final Layout table = new MVerticalLayout().withMargin(false);
+    private final Layout commonFields = new MFormLayout();
+    private final Layout dataFields = new MFormLayout();
 
     private MGrid<Campaign> grid = new MGrid<>(Campaign.class)
             .withProperties("id", "name", "startDate", "endDate", "data")
@@ -91,7 +91,7 @@ public class CampaignsView extends VerticalLayout implements View {
 
         commonFields.addComponents(name, startDate, places);
 
-        panel.setSizeFull();
+        panel.setSizeUndefined();
         panel.setVisible(false);
         panel.setContent(
                 new MVerticalLayout(
@@ -104,7 +104,7 @@ public class CampaignsView extends VerticalLayout implements View {
                 )
         );
 
-        addComponent(new MVerticalLayout(table, panel).withFullSize().withMargin(false));
+        addComponent(new MHorizontalLayout(table, panel).withMargin(false));
     }
 
     private void updateGrid(ContentKind kind) {
@@ -153,6 +153,17 @@ public class CampaignsView extends VerticalLayout implements View {
         refreshFieldsFor(binder);
     }
 
+    private void refreshFieldsFor(Binder<Campaign> binder) {
+        dataFields.removeAllComponents();
+        if (campaign != null && campaign.getContentKind() != null) {
+            dataFields.addComponents(
+                    campaign.getContentKind().getFields().stream().
+                            map(field -> field.getType().ui(field.getName(), binder)).
+                            toArray(AbstractField[]::new)
+            );
+        }
+    }
+
     private void saveCustomer() {
         campaign.setData(
                 campaign.getData().entrySet().stream().
@@ -177,16 +188,5 @@ public class CampaignsView extends VerticalLayout implements View {
         places.setCaption("places");
         places.setRows(3);
         places.setDataProvider(ofCollection(placeRepo.findAllNames()));
-    }
-
-    private void refreshFieldsFor(Binder<Campaign> binder) {
-        dataFields.removeAllComponents();
-        if (campaign != null && campaign.getContentKind() != null) {
-            dataFields.addComponents(
-                    campaign.getContentKind().getFields().stream().
-                            map(field -> field.getType().ui(field.getName(), binder)).
-                            toArray(AbstractField[]::new)
-            );
-        }
     }
 }

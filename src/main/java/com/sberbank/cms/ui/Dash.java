@@ -8,16 +8,12 @@ import com.vaadin.server.DefaultErrorHandler;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.spring.navigator.SpringViewProvider;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.Layout;
-import com.vaadin.ui.Notification;
-import com.vaadin.ui.UI;
+import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import org.vaadin.spring.security.VaadinSecurity;
 import org.vaadin.spring.security.util.SecurityExceptionUtils;
 import org.vaadin.spring.sidebar.components.ValoSideBar;
 import org.vaadin.spring.sidebar.security.VaadinSecurityItemFilter;
-import org.vaadin.viritin.layouts.MCssLayout;
 import org.vaadin.viritin.layouts.MHorizontalLayout;
 
 import static com.vaadin.icons.VaadinIcons.ROCKET;
@@ -52,7 +48,10 @@ public class Dash extends UI {
             }
         });
 
-        final MCssLayout viewContainer = new MCssLayout().withFullSize();
+        final HorizontalLayout viewContainer = new HorizontalLayout();
+        viewContainer.setSizeFull();
+        viewContainer.setMargin(false);
+        viewContainer.setStyleName("v-scrollable");
         setNavigator(navigator(viewContainer));
 
         configureSideBar();
@@ -67,7 +66,7 @@ public class Dash extends UI {
         sideBar.setLogo(new Label(ROCKET.getHtml(), HTML));
     }
 
-    private Navigator navigator(Layout viewContainer) {
+    private Navigator navigator(ComponentContainer viewContainer) {
         // Without an AccessDeniedView, the view provider would act like the restricted views did not exist at all.
         viewProvider.setAccessDeniedViewClass(AccessDeniedView.class);
 
