@@ -29,10 +29,9 @@ import static com.vaadin.ui.Grid.SelectionMode.NONE;
 @ViewScope
 public class PlacesView extends VerticalLayout implements View {
     public static final String VIEW_NAME = "places";
-    private static final long serialVersionUID = -5940176536863140421L;
 
     private final PlaceRepository repo;
-    private MGrid<Place> grid;
+    private final MGrid<Place> grid = new MGrid<>(Place.class).withProperties("name").withFullSize();
     private TextField name;
 
     public PlacesView(PlaceRepository repo) {
@@ -47,10 +46,7 @@ public class PlacesView extends VerticalLayout implements View {
 
         addComponent(
                 new VerticalLayout(
-                        new MHorizontalLayout(
-                                name,
-                                add
-                        ).expand(name).alignAll(BOTTOM_CENTER),
+                        new MHorizontalLayout(name, add).expand(name).alignAll(BOTTOM_CENTER),
                         grid
                 )
         );
@@ -58,12 +54,9 @@ public class PlacesView extends VerticalLayout implements View {
     }
 
     private void configureGrid() {
-        grid = new MGrid<>(Place.class).withProperties("name").withFullSize();
-
         grid.addComponentColumn(place -> new MButton(TRASH, click -> del(place)));
         grid.setSelectionMode(NONE);
         grid.getEditor().setEnabled(true).setBuffered(true).addSaveListener(e -> updateGrid());
-
         grid.getColumn("name").setEditorBinding(grid.getEditor().getBinder().bind(new TextField(), "name"));
     }
 

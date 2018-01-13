@@ -31,17 +31,17 @@ import static java.util.stream.Collectors.toMap;
 @SpringView(name = CampaignEditView.VIEW_NAME)
 public class CampaignEditView extends VerticalLayout implements View {
     public static final String VIEW_NAME = "campaign";
-    private BeanValidationBinder<Campaign> binder;
 
-    private TextField name = new MTextField("Name").withFullWidth();
-    private DateTimeField startDate = new DateTimeField("Start date", LocalDateTime.now());
+    private final TextField name = new MTextField("Name").withFullWidth();
+    private final DateTimeField startDate = new DateTimeField("Start date", LocalDateTime.now());
     private final ListSelect<String> places = new ListSelect<>();
+    private final Layout commonFields = new MVerticalLayout(new MLabel("Common").withStyleName("header").withFullWidth());
+    private final Layout dataFields = new MVerticalLayout(new MLabel("Content").withStyleName("header").withFullWidth());
     private Button cancel;
     private CampaignRepository campaignRepo;
     private PlaceRepository placeRepo;
     private ContentKindRepository contentKindRepo;
-    private final Layout commonFields = new MVerticalLayout(new MLabel("Common").withStyleName("header").withFullWidth());
-    private final Layout dataFields = new MVerticalLayout(new MLabel("Content").withStyleName("header").withFullWidth());
+    private BeanValidationBinder<Campaign> binder;
 
     @Autowired
     public CampaignEditView(CampaignRepository campaignRepo, PlaceRepository placeRepo, ContentKindRepository contentKindRepo) {
@@ -53,13 +53,12 @@ public class CampaignEditView extends VerticalLayout implements View {
     @PostConstruct
     public void init() {
         binder = new BeanValidationBinder<>(Campaign.class);
-//		binder.setRequiredConfigurator(null);
         binder.bindInstanceFields(this);
     }
 
     private void refreshFieldsFor(Binder<Campaign> binder) {
         dataFields.removeAllComponents();
-        Campaign campaign = this.binder.getBean();
+        Campaign campaign = getCampaign();
         if (campaign != null && campaign.getContentKind() != null) {
             dataFields.addComponents(
                     campaign.getContentKind().getFields().stream().
@@ -74,7 +73,6 @@ public class CampaignEditView extends VerticalLayout implements View {
 
         //FIXME temporary coupling in next to lines
         configurePlaces();
-
         enterView(event.getParameters());
 
         commonFields.addComponents(name, startDate, places);
@@ -82,14 +80,18 @@ public class CampaignEditView extends VerticalLayout implements View {
                 commonFields,
                 dataFields,
                 new MCssLayout(
-                        new MButton("Save", e -> saveCustomer()),
+                        new MButton("Save", e -> saveAndBack()),
                         new MButton("Cancel", e -> back())
                 ).withFullWidth()
         );
     }
 
     private void back() {
-        getUI().getNavigator().navigateTo(CmpsView.VIEW_NAME + "/" + binder.getBean().getContentKind().getStrId());
+        getUI().getNavigator().navigateTo(CampaignsView.VIEW_NAME + "/" + getCampaign().getContentKind().getStrId());
+    }
+
+    private Campaign getCampaign() {
+        return binder.getBean();
     }
 
     private void configurePlaces() {
@@ -98,21 +100,24 @@ public class CampaignEditView extends VerticalLayout implements View {
         places.setDataProvider(ofCollection(placeRepo.findAllNames()));
     }
 
-    private void saveCustomer() {
-        Campaign campaign = binder.getBean();
+    private void saveAndBack() {
+        Optional<HasValue<?>> firstErrorField = validate().findFirst();
+        if (firstErrorField.isPresent()) {
+            ((Focusable) firstErrorField.get()).focus();
+        } else {
+            saveBean();
+            back();
+        }
+    }
+
+    private void saveBean() {
+        Campaign campaign = getCampaign();
         campaign.setData(
                 campaign.getData().entrySet().stream().
                         filter(notKindFieldsOrPlaces(campaign)).
                         collect(toMap(Map.Entry::getKey, Map.Entry::getValue))
         );
-
-        Optional<HasValue<?>> firstErrorField = validate().findFirst();
-        if (firstErrorField.isPresent()) {
-            ((Focusable) firstErrorField.get()).focus();
-            return;
-        }
         campaignRepo.save(campaign);
-        back();
     }
 
     private Predicate<Map.Entry<String, Object>> notKindFieldsOrPlaces(Campaign campaign) {

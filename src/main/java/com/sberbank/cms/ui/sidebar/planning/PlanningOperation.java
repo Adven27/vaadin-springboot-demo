@@ -10,6 +10,9 @@ import org.vaadin.spring.sidebar.annotation.VaadinFontIcon;
 
 import java.io.Serializable;
 
+/**
+ * Just example of runnable menu item
+ */
 @SideBarItem(sectionId = Sections.PLANNING, caption = "Operation", order = 3)
 @VaadinFontIcon(VaadinIcons.REFRESH)
 @Component

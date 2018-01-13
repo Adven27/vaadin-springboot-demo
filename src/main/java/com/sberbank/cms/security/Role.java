@@ -9,6 +9,5 @@ public class Role {
     public static final String[] ALL = {OFFICER, ADMIN};
 
     private Role() {
-        // Static methods and fields only
     }
 }
