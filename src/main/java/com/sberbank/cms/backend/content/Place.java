@@ -11,24 +11,18 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 
-import static javax.persistence.GenerationType.AUTO;
+import static javax.persistence.GenerationType.IDENTITY;
 
 @Data
 @NoArgsConstructor
 @Entity
 public class Place implements Serializable {
-    private static final long serialVersionUID = 1L;
-
     @Id
-    @GeneratedValue(strategy = AUTO)
+    @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
     @NotNull(message = "Name is required")
     @Size(min = 1, max = 40)
     @Column(unique = true)
     private String name = "new place";
-
-    public Place(String name){
-        this.name = name;
-    }
 }

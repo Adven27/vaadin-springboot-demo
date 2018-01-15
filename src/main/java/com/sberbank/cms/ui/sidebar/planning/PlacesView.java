@@ -9,6 +9,7 @@ import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.UserError;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.ViewScope;
+import com.vaadin.ui.Grid;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import org.vaadin.spring.sidebar.annotation.SideBarItem;
@@ -31,7 +32,7 @@ public class PlacesView extends VerticalLayout implements View {
     public static final String VIEW_NAME = "places";
 
     private final PlaceRepository repo;
-    private final MGrid<Place> grid = new MGrid<>(Place.class).withProperties("name").withFullSize();
+    private final Grid<Place> grid = new MGrid<>(Place.class).withProperties("name").withFullSize();
     private TextField name;
 
     public PlacesView(PlaceRepository repo) {
@@ -41,6 +42,8 @@ public class PlacesView extends VerticalLayout implements View {
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
         MButton add = new AddButton(click -> add());
+        add.setEnabled(false);
+
         name = new MTextField("", input -> add.setEnabled(input.getValue().length() > 0)).withPlaceholder("Place...");
         configureGrid();
 
@@ -50,35 +53,40 @@ public class PlacesView extends VerticalLayout implements View {
                         grid
                 )
         );
-        updateGrid();
+        refreshGrid();
     }
 
     private void configureGrid() {
-        grid.addComponentColumn(place -> new MButton(TRASH, click -> del(place)));
+        grid.setSizeFull();
         grid.setSelectionMode(NONE);
-        grid.getEditor().setEnabled(true).setBuffered(true).addSaveListener(e -> updateGrid());
-        grid.getColumn("name").setEditorBinding(grid.getEditor().getBinder().bind(new TextField(), "name"));
+        grid.addComponentColumn(place -> new MButton(TRASH, click -> del(place)));
+        grid.getColumn("name").setEditorComponent(new TextField());
+        grid.getEditor().setEnabled(true).setBuffered(true).addSaveListener(e -> saveAndRefreshGrid(e.getBean()));
+    }
+
+    private void saveAndRefreshGrid(Place bean) {
+        repo.save(bean);
+        refreshGrid();
     }
 
     private void del(Place place) {
         repo.delete(place);
-        updateGrid();
+        refreshGrid();
     }
 
     private void add() {
         Place place = new Place();
         place.setName(name.getValue());
         try {
-            repo.save(place);
+            saveAndRefreshGrid(place);
             name.clear();
         } catch (Exception e) {
             name.setComponentError(new UserError(e.getMessage()));
         }
-        updateGrid();
     }
 
-    private void updateGrid() {
+    private void refreshGrid() {
         grid.getEditor().cancel();
-        grid.setRows(repo.findAll());
+        grid.setItems(repo.findAll());
     }
 }

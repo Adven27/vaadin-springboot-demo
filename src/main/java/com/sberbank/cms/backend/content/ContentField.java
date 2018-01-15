@@ -12,7 +12,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 import static javax.persistence.EnumType.STRING;
-import static javax.persistence.GenerationType.AUTO;
+import static javax.persistence.GenerationType.IDENTITY;
 
 @Builder
 @Data
@@ -23,7 +23,7 @@ public class ContentField implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = AUTO)
+    @GeneratedValue(strategy = IDENTITY)
     private long id;
 
     @NotNull(message = "Name is required")
@@ -35,7 +35,8 @@ public class ContentField implements Serializable {
     private FieldType type;
 
     @ManyToOne(optional = false)
-    private ContentKind contentKind;
+    @JoinColumn(name = "kind")
+    private ContentKind kind;
 
     @Override
     public boolean equals(Object o) {

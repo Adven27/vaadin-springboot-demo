@@ -36,7 +36,7 @@ public class ContentKind implements Serializable {
     @Temporal(TIMESTAMP)
     private Date creationDate = new Date();
 
-    @OneToMany(mappedBy = "contentKind", cascade = ALL, orphanRemoval = true, fetch = EAGER)
+    @OneToMany(mappedBy = "kind", cascade = ALL, orphanRemoval = true, fetch = EAGER)
     private List<ContentField> fields = new ArrayList<>();
 
 }

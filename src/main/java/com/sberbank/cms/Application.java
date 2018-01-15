@@ -13,15 +13,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.vaadin.spring.sidebar.annotation.EnableSideBar;
 
+import java.time.LocalDateTime;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Stream;
 
-import static com.sberbank.cms.backend.content.FieldType.*;
+import static com.sberbank.cms.backend.content.FieldType.RICH_TEXT;
+import static com.sberbank.cms.backend.content.FieldType.TEXT;
 import static java.util.Arrays.asList;
-import static java.util.stream.Collectors.toList;
 
 @EnableSideBar
 @SpringBootApplication
@@ -34,13 +31,19 @@ public class Application {
 
     @Bean
     public CommandLineRunner loadData(UserRepository repo, PasswordEncoder passEncoder,
-                                      CampaignRepository campaignRepo, ContentKindRepository kindRepo,
-                                      PlaceRepository placeRepo) {
+                                      CampaignRepository campaignRepo, ContentKindRepository kindRepo) {
         return (args) -> {
             addUsers(repo, passEncoder);
-            addPlaces(placeRepo, "place 1", "place 2");
-            addCampaigns(campaignRepo, kindRepo, "offer");
-            addCampaigns(campaignRepo, kindRepo, "vector", "place 1", "place 2");
+            ContentKind kind = tipsKind();
+            kindRepo.save(kind);
+            kindRepo.save(offersKind());
+            kindRepo.save(vectorsKind());
+
+            Campaign entity = new Campaign();
+            entity.setKind(kind);
+            entity.setStartDate(LocalDateTime.now());
+            entity.setName("Test");
+            campaignRepo.save(entity);
         };
     }
 
@@ -50,51 +53,39 @@ public class Application {
         repo.save(new UserInfo(admin, admin, passEncoder.encode(admin), Role.ADMIN));
         repo.save(new UserInfo(op, "officer", passEncoder.encode(op), Role.OFFICER));
 
-        LOG.info("Customers found with findAll():");
+        LOG.info("Users found with findAll():");
         LOG.info("-------------------------------");
         repo.findAll().forEach(user -> LOG.info(user.toString()));
         LOG.info("");
-
-        LOG.info("Customer found with findByLastNameStartsWithIgnoreCase('" + op + "'):");
-        LOG.info("--------------------------------------------");
-        repo.findByLoginLikeIgnoreCaseOrNameLikeIgnoreCase(op, op).forEach(user -> LOG.info(user.toString()));
-        LOG.info("");
     }
 
-    private void addCampaigns(CampaignRepository campaignRepo, ContentKindRepository kindRepo, String name, String... places) {
-        ContentKind kind = kind(name);
-        kindRepo.save(kind);
-        Map<String, Object> data = new HashMap<>();
-        data.put("text field", "some value");
-        data.put("places", asList(places));
-
-        campaignRepo.save(Campaign.builder().contentKind(kind).data(data).name(name).build());
-
-        LOG.info("Campaign found with findByContentKind('" + kind + "'):");
-        LOG.info("--------------------------------------------");
-        campaignRepo.findByContentKind(kind.getStrId()).forEach(campaign -> LOG.info(campaign.toString()));
-        LOG.info("");
+    private ContentKind tipsKind() {
+        ContentKind kind = ContentKind.builder().strId("tips").name("Tips").creationDate(new Date()).build();
+        ContentField.ContentFieldBuilder builder = ContentField.builder().kind(kind);
+        kind.setFields(asList(
+                builder.name("title").type(TEXT).build(),
+                builder.name("desc").type(RICH_TEXT).build()
+        ));
+        return kind;
     }
 
-    private void addPlaces(PlaceRepository repo, String... names) {
-        repo.save(Stream.of(names).map(Place::new).collect(toList()));
-
-        LOG.info("Places found with findAllNames():");
-        LOG.info("--------------------------------------------");
-        repo.findAllNames().forEach(LOG::info);
-        LOG.info("");
+    private ContentKind offersKind() {
+        ContentKind kind = ContentKind.builder().strId("offers").name("Offers").creationDate(new Date()).build();
+        ContentField.ContentFieldBuilder builder = ContentField.builder().kind(kind);
+        kind.setFields(asList(
+                builder.name("title").type(TEXT).build(),
+                builder.name("desc").type(RICH_TEXT).build()
+        ));
+        return kind;
     }
 
-    private ContentKind kind(String name) {
-        ContentKind kind = ContentKind.builder().strId(name).name(name + "s").creationDate(new Date()).build();
-        ContentField.ContentFieldBuilder builder = ContentField.builder().contentKind(kind);
-        List<ContentField> fields = asList(
-                builder.name("text field").type(TEXT).build(),
-                builder.name("rich field").type(RICH_TEXT).build(),
-                builder.name("bool field").type(BOOL).build(),
-                builder.name("date field").type(DATE).build()
-        );
-        kind.setFields(fields);
+    private ContentKind vectorsKind() {
+        ContentKind kind = ContentKind.builder().strId("vectors").name("Vectors").creationDate(new Date()).build();
+        ContentField.ContentFieldBuilder builder = ContentField.builder().kind(kind);
+        kind.setFields(asList(
+                builder.name("name").type(TEXT).build(),
+                builder.name("value").type(TEXT).build()
+        ));
         return kind;
     }
 }

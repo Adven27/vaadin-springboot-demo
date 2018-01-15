@@ -47,7 +47,7 @@ public class ContentForm extends CommonForm<ContentKind> {
 
     @Override
     public FormLayout formLayout() {
-        fields.addElementAddedListener(e -> e.getElement().setContentKind(getEntity()));
+        fields.addElementAddedListener(e -> e.getElement().setKind(getEntity()));
         return new MFormLayout(strId, name, fields);
     }
 }

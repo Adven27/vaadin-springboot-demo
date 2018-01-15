@@ -3,11 +3,15 @@ package com.sberbank.cms.security;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.util.Objects;
+
+import static javax.persistence.GenerationType.IDENTITY;
 
 @NoArgsConstructor
 @Data
@@ -16,7 +20,7 @@ public class UserInfo implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
     @NotNull
@@ -39,11 +43,6 @@ public class UserInfo implements Serializable {
     private boolean locked = false;
 
     public UserInfo(String login, String name, String password, String role) {
-        Objects.requireNonNull(login);
-        Objects.requireNonNull(name);
-        Objects.requireNonNull(password);
-        Objects.requireNonNull(role);
-
         this.login = login;
         this.name = name;
         this.password = password;

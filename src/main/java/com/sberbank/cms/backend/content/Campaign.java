@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
-import static javax.persistence.GenerationType.AUTO;
+import static javax.persistence.GenerationType.IDENTITY;
 
 @Builder
 @Data
@@ -30,7 +30,7 @@ public class Campaign implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = AUTO)
+    @GeneratedValue(strategy = IDENTITY)
     private long id;
 
     @NotBlank
@@ -47,6 +47,6 @@ public class Campaign implements Serializable {
     Map<String, Object> data = new HashMap<>();
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "content_kind_str_id")
-    private ContentKind contentKind;
+    @JoinColumn(name = "kind")
+    private ContentKind kind;
 }

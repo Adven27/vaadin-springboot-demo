@@ -7,14 +7,14 @@ CREATE TABLE content_kind (
 );
 
 CREATE TABLE content_field (
-  id   INTEGER PRIMARY KEY,
+  id   SERIAL8 PRIMARY KEY,
   name TEXT,
   kind TEXT NOT NULL REFERENCES content_kind (str_id),
   type TEXT
 );
 
 CREATE TABLE campaign (
-  id         INTEGER PRIMARY KEY,
+  id         SERIAL8 PRIMARY KEY,
   kind       TEXT NOT NULL REFERENCES content_kind (str_id),
   data       JSONB,
   name       TEXT NOT NULL,
@@ -24,6 +24,18 @@ CREATE TABLE campaign (
 );
 
 CREATE TABLE place (
-  id   INTEGER PRIMARY KEY,
-  name TEXT NOT NULL
+  id   SERIAL8 PRIMARY KEY,
+  name TEXT NOT NULL UNIQUE,
+  CHECK (name <> '')
+);
+
+INSERT INTO place (name) VALUES ('Мой помощник'), ('Предложение банка'), ('Экран успеха');
+
+CREATE TABLE user_info (
+  id       SERIAL8 PRIMARY KEY,
+  name     TEXT    NOT NULL,
+  login    TEXT    NOT NULL UNIQUE,
+  password TEXT    NOT NULL,
+  role     TEXT    NOT NULL,
+  locked   BOOLEAN NOT NULL
 );

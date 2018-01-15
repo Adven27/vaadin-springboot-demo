@@ -1,5 +1,6 @@
 package com.sberbank.cms.configuration;
 
+import com.sberbank.cms.backend.content.ContentKind;
 import lombok.extern.java.Log;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.support.ApplicationContextFactory;
@@ -8,6 +9,7 @@ import org.springframework.batch.item.xml.StaxWriterCallback;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.ConversionService;
+import org.springframework.core.convert.converter.Converter;
 import org.springframework.core.convert.support.DefaultConversionService;
 
 import javax.xml.stream.XMLEventFactory;
@@ -61,6 +63,13 @@ public class ExportJob {
     public ConversionService conversionService() {
         DefaultConversionService service = new DefaultConversionService();
         service.addConverter(new Json2MapConverter());
+        service.addConverter(new Converter<String, ContentKind>(){
+
+            @Override
+            public ContentKind convert(String source) {
+                return ContentKind.builder().strId(source).build();
+            }
+        } );
         return service;
     }
 

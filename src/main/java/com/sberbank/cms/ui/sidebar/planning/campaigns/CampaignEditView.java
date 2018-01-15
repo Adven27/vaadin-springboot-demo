@@ -59,9 +59,9 @@ public class CampaignEditView extends VerticalLayout implements View {
     private void refreshFieldsFor(Binder<Campaign> binder) {
         dataFields.removeAllComponents();
         Campaign campaign = getCampaign();
-        if (campaign != null && campaign.getContentKind() != null) {
+        if (campaign != null && campaign.getKind() != null) {
             dataFields.addComponents(
-                    campaign.getContentKind().getFields().stream().
+                    campaign.getKind().getFields().stream().
                             map(field -> field.getType().ui(field.getName(), binder)).
                             toArray(AbstractField[]::new)
             );
@@ -87,7 +87,7 @@ public class CampaignEditView extends VerticalLayout implements View {
     }
 
     private void back() {
-        getUI().getNavigator().navigateTo(CampaignsView.VIEW_NAME + "/" + getCampaign().getContentKind().getStrId());
+        getUI().getNavigator().navigateTo(CampaignsView.VIEW_NAME + "/" + getCampaign().getKind().getStrId());
     }
 
     private Campaign getCampaign() {
@@ -121,7 +121,7 @@ public class CampaignEditView extends VerticalLayout implements View {
     }
 
     private Predicate<Map.Entry<String, Object>> notKindFieldsOrPlaces(Campaign campaign) {
-        List<String> kindFields = campaign.getContentKind().getFields().stream().
+        List<String> kindFields = campaign.getKind().getFields().stream().
                 map(ContentField::getName).
                 collect(toList());
         return entry -> kindFields.contains(entry.getKey()) || places.getCaption().equalsIgnoreCase(entry.getKey());
@@ -136,7 +136,7 @@ public class CampaignEditView extends VerticalLayout implements View {
                 return;
             }
         } catch (NumberFormatException e) {
-            campaign.setContentKind(contentKindRepo.findByStrId(param));
+            campaign.setKind(contentKindRepo.findByStrId(param));
         }
         setBean(campaign);
     }
