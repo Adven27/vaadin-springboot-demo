@@ -12,6 +12,7 @@ import com.vaadin.ui.TextField;
 import org.vaadin.spring.events.EventBus;
 import org.vaadin.viritin.fields.ElementCollectionField;
 import org.vaadin.viritin.fields.EnumSelect;
+import org.vaadin.viritin.fields.IntegerField;
 import org.vaadin.viritin.fields.MTextField;
 import org.vaadin.viritin.layouts.MFormLayout;
 
@@ -30,6 +31,7 @@ public class ContentForm extends CommonForm<ContentKind> {
     public static class FieldRow {
         TextField name = new MTextField().withPlaceholder("name");
         EnumSelect<FieldType> type = (EnumSelect) new EnumSelect(FieldType.class);
+        IntegerField order = new IntegerField();
     }
 
     private ElementCollectionField<ContentField, List<ContentField>> fields =

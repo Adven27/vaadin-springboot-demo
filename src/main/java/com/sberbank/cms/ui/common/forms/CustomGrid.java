@@ -30,7 +30,6 @@ public abstract class CustomGrid<T> extends CustomComponent {
     public CustomGrid(EventBus.UIEventBus eventBus, Class<T> clazz) {
         this.clazz = clazz;
         list = grid();
-        // A layout structure used for composition
         list.setSelectionMode(NONE);
         list.addComponentColumn(row -> new HorizontalLayout(
                         new MButton(PENCIL, click -> edit(row)),

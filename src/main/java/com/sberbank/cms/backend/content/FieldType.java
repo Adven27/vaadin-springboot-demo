@@ -3,6 +3,7 @@ package com.sberbank.cms.backend.content;
 import com.vaadin.data.*;
 import com.vaadin.server.Setter;
 import com.vaadin.ui.*;
+import org.vaadin.viritin.fields.MTextField;
 
 import java.time.LocalDate;
 import java.util.Map;
@@ -13,15 +14,17 @@ public enum FieldType {
     public AbstractField ui(String caption, Binder<Campaign> binder) {
         switch (this) {
             case TEXT:
-                return bind(new TextField(caption), binder, new NOOPConverter());
+                return bind(new MTextField(caption).withFullWidth(), binder, new NOOPConverter());
             case RICH_TEXT:
-                return bind(new RichTextArea(caption), binder, new NOOPConverter());
+                RichTextArea textArea = new RichTextArea(caption);
+                textArea.setSizeFull();
+                return bind(textArea, binder, new NOOPConverter());
             case DATE:
                 return bind(new DateField(caption), binder, new DateConverter());
             case BOOL:
                 return bind(new CheckBox(caption, false), binder, new BoolConverter());
             default:
-                return bind(new TextField(caption), binder, new NOOPConverter());
+                return bind(new MTextField(caption).withFullWidth(), binder, new NOOPConverter());
         }
     }
 

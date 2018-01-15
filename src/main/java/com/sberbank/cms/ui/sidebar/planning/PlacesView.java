@@ -17,12 +17,13 @@ import org.vaadin.spring.sidebar.annotation.VaadinFontIcon;
 import org.vaadin.viritin.button.MButton;
 import org.vaadin.viritin.fields.MTextField;
 import org.vaadin.viritin.grid.MGrid;
-import org.vaadin.viritin.layouts.MHorizontalLayout;
+import org.vaadin.viritin.layouts.MCssLayout;
 
 import static com.vaadin.icons.VaadinIcons.TAGS;
 import static com.vaadin.icons.VaadinIcons.TRASH;
-import static com.vaadin.ui.Alignment.BOTTOM_CENTER;
 import static com.vaadin.ui.Grid.SelectionMode.NONE;
+import static com.vaadin.ui.themes.ValoTheme.BUTTON_DANGER;
+import static com.vaadin.ui.themes.ValoTheme.LAYOUT_COMPONENT_GROUP;
 
 @SpringView(name = PlacesView.VIEW_NAME)
 @SideBarItem(sectionId = Sections.PLANNING, caption = "Places", order = 2)
@@ -32,7 +33,8 @@ public class PlacesView extends VerticalLayout implements View {
     public static final String VIEW_NAME = "places";
 
     private final PlaceRepository repo;
-    private final Grid<Place> grid = new MGrid<>(Place.class).withProperties("name").withFullSize();
+    private final Grid<Place> grid = new MGrid<>(Place.class).withProperties("name")
+            .withFullSize();
     private TextField name;
 
     public PlacesView(PlaceRepository repo) {
@@ -44,12 +46,14 @@ public class PlacesView extends VerticalLayout implements View {
         MButton add = new AddButton(click -> add());
         add.setEnabled(false);
 
-        name = new MTextField("", input -> add.setEnabled(input.getValue().length() > 0)).withPlaceholder("Place...");
+        name = new MTextField("", input -> add.setEnabled(input.getValue().length() > 0))
+                .withPlaceholder("Add new place...");
+
         configureGrid();
 
         addComponent(
                 new VerticalLayout(
-                        new MHorizontalLayout(name, add).expand(name).alignAll(BOTTOM_CENTER),
+                        new MCssLayout(name, add).withStyleName(LAYOUT_COMPONENT_GROUP),
                         grid
                 )
         );
@@ -57,10 +61,11 @@ public class PlacesView extends VerticalLayout implements View {
     }
 
     private void configureGrid() {
+        grid.setHeaderVisible(false);
         grid.setSizeFull();
         grid.setSelectionMode(NONE);
-        grid.addComponentColumn(place -> new MButton(TRASH, click -> del(place)));
-        grid.getColumn("name").setEditorComponent(new TextField());
+        grid.addComponentColumn(place -> new MButton(TRASH, click -> del(place)).withStyleName(BUTTON_DANGER));
+        grid.getColumn("name").setEditorComponent(new TextField()).setExpandRatio(1);
         grid.getEditor().setEnabled(true).setBuffered(true).addSaveListener(e -> saveAndRefreshGrid(e.getBean()));
     }
 

@@ -10,7 +10,8 @@ CREATE TABLE content_field (
   id   SERIAL8 PRIMARY KEY,
   name TEXT,
   kind TEXT NOT NULL REFERENCES content_kind (str_id),
-  type TEXT
+  type TEXT,
+  ord INTEGER
 );
 
 CREATE TABLE campaign (

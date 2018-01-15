@@ -8,11 +8,9 @@ import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Layout;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.themes.ValoTheme;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.access.annotation.Secured;
@@ -21,12 +19,15 @@ import org.vaadin.spring.sidebar.annotation.VaadinFontIcon;
 import org.vaadin.viritin.button.MButton;
 import org.vaadin.viritin.fields.MTextField;
 import org.vaadin.viritin.grid.MGrid;
+import org.vaadin.viritin.layouts.MCssLayout;
 import org.vaadin.viritin.layouts.MHorizontalLayout;
 
 import static com.sberbank.cms.security.Role.ROLE_ADMIN;
 import static com.sberbank.cms.security.Role.ROLE_OFFICER;
 import static com.sberbank.cms.ui.sidebar.Sections.PLANNING;
 import static com.vaadin.icons.VaadinIcons.SHOP;
+import static com.vaadin.ui.themes.ValoTheme.BUTTON_PRIMARY;
+import static com.vaadin.ui.themes.ValoTheme.LAYOUT_COMPONENT_GROUP;
 
 @Secured({ROLE_ADMIN, ROLE_OFFICER})
 @SpringView(name = CampaignsView.VIEW_NAME)
@@ -82,15 +83,14 @@ public class CampaignsView extends VerticalLayout implements View {
         );
     }
 
-    @NotNull
-    private HorizontalLayout kindsLayout() {
-        HorizontalLayout layout = new MHorizontalLayout();
+    private Layout kindsLayout() {
+        Layout layout = new MCssLayout().withStyleName(LAYOUT_COMPONENT_GROUP);
         kindRepo.findAll().forEach(
                 kind -> layout.addComponent(
                         new MButton(
                                 kind.getName(),
                                 click -> getUI().getNavigator().navigateTo(VIEW_NAME + "/" + kind.getStrId())
-                        ).withStyleName(kind.getStrId().equals(kindStrId) ? ValoTheme.BUTTON_PRIMARY : "")
+                        ).withStyleName(kind.getStrId().equals(kindStrId) ? BUTTON_PRIMARY : "")
                 )
         );
         return layout;

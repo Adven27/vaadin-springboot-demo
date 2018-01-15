@@ -38,6 +38,9 @@ public class ContentField implements Serializable {
     @JoinColumn(name = "kind")
     private ContentKind kind;
 
+    @Column(name = "ord")
+    private Integer order;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

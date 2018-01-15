@@ -46,6 +46,8 @@ dependencies {
 
 	//FIXME
 	compile("org.glassfish.web:el-impl:2.2")
+	//FIXME viritin IntegerField doesn't work (NoClassDefFound)
+	compile 'org.apache.commons:commons-lang3:3.1'
 	//compile("org.springframework.boot:spring-boot-starter-actuator")
 	compile('org.vaadin.spring.extensions:vaadin-spring-ext-boot:2.0.0.RELEASE')
 	compile('org.vaadin.spring.extensions:vaadin-spring-ext-security:2.0.0.RELEASE')

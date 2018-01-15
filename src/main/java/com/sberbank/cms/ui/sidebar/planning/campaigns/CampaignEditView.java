@@ -9,13 +9,12 @@ import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.*;
-import org.jetbrains.annotations.NotNull;
+import com.vaadin.ui.themes.ValoTheme;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.viritin.button.MButton;
 import org.vaadin.viritin.fields.MTextField;
-import org.vaadin.viritin.label.MLabel;
 import org.vaadin.viritin.layouts.MCssLayout;
-import org.vaadin.viritin.layouts.MVerticalLayout;
+import org.vaadin.viritin.layouts.MFormLayout;
 
 import javax.annotation.PostConstruct;
 import java.time.LocalDateTime;
@@ -24,6 +23,7 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import static com.vaadin.data.provider.DataProvider.ofCollection;
+import static com.vaadin.ui.themes.ValoTheme.BUTTON_PRIMARY;
 import static java.lang.Long.parseLong;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
@@ -35,9 +35,7 @@ public class CampaignEditView extends VerticalLayout implements View {
     private final TextField name = new MTextField("Name").withFullWidth();
     private final DateTimeField startDate = new DateTimeField("Start date", LocalDateTime.now());
     private final ListSelect<String> places = new ListSelect<>();
-    private final Layout commonFields = new MVerticalLayout(new MLabel("Common").withStyleName("header").withFullWidth());
-    private final Layout dataFields = new MVerticalLayout(new MLabel("Content").withStyleName("header").withFullWidth());
-    private Button cancel;
+    private final Layout form = new MFormLayout(name, startDate, places).withFullWidth();
     private CampaignRepository campaignRepo;
     private PlaceRepository placeRepo;
     private ContentKindRepository contentKindRepo;
@@ -56,34 +54,30 @@ public class CampaignEditView extends VerticalLayout implements View {
         binder.bindInstanceFields(this);
     }
 
-    private void refreshFieldsFor(Binder<Campaign> binder) {
-        dataFields.removeAllComponents();
-        Campaign campaign = getCampaign();
-        if (campaign != null && campaign.getKind() != null) {
-            dataFields.addComponents(
-                    campaign.getKind().getFields().stream().
-                            map(field -> field.getType().ui(field.getName(), binder)).
-                            toArray(AbstractField[]::new)
-            );
-        }
-    }
-
     @Override
     public void enter(ViewChangeEvent event) {
-
         //FIXME temporary coupling in next to lines
         configurePlaces();
         enterView(event.getParameters());
 
-        commonFields.addComponents(name, startDate, places);
         addComponents(
-                commonFields,
-                dataFields,
+                form,
                 new MCssLayout(
-                        new MButton("Save", e -> saveAndBack()),
+                        new MButton("Save", e -> saveAndBack()).withStyleName(BUTTON_PRIMARY),
                         new MButton("Cancel", e -> back())
-                ).withFullWidth()
+                ).withFullWidth().withStyleName(ValoTheme.LAYOUT_COMPONENT_GROUP)
         );
+    }
+
+    private void addKindFields(Binder<Campaign> binder) {
+        Campaign campaign = getCampaign();
+        if (campaign != null && campaign.getKind() != null) {
+            form.addComponents(
+                    campaign.getKind().getFields().stream()
+                            .map(field -> field.getType().ui(field.getName(), binder))
+                            .toArray(AbstractField[]::new)
+            );
+        }
     }
 
     private void back() {
@@ -95,7 +89,7 @@ public class CampaignEditView extends VerticalLayout implements View {
     }
 
     private void configurePlaces() {
-        places.setCaption("places");
+        places.setCaption("Places");
         places.setRows(3);
         places.setDataProvider(ofCollection(placeRepo.findAllNames()));
     }
@@ -151,10 +145,9 @@ public class CampaignEditView extends VerticalLayout implements View {
                     campaign.setData(data);
                 }
         );
-        refreshFieldsFor(binder);
+        addKindFields(binder);
     }
 
-    @NotNull
     private HashSet<String> setter(Campaign c) {
         return c.getData() == null || c.getData().isEmpty()
                 ? new HashSet<>()
