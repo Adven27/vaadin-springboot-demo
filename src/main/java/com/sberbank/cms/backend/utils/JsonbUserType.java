@@ -50,16 +50,14 @@ public class JsonbUserType implements UserType {
     @Override
     public Object nullSafeGet(ResultSet rs, String[] names, SessionImplementor session, Object owner) throws HibernateException, SQLException {
         PGobject o = (PGobject) rs.getObject(names[0]);
-        if (o.getValue() != null) {
-            return gson.fromJson(o.getValue(), Map.class);
-        }
-        return new HashMap<String, String>();
+        return o == null || o.getValue() == null
+                ? new HashMap<String, String>()
+                : gson.fromJson(o.getValue(), Map.class);
     }
 
     @Override
     public Serializable disassemble(Object value) throws HibernateException {
         Object copy = deepCopy(value);
-
         if (copy instanceof Serializable) {
             return (Serializable) copy;
         }

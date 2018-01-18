@@ -39,11 +39,13 @@ public class Application {
             kindRepo.save(offersKind());
             kindRepo.save(vectorsKind());
 
-            Campaign entity = new Campaign();
-            entity.setKind(kind);
-            entity.setStartDate(LocalDateTime.now());
-            entity.setName("Test");
-            campaignRepo.save(entity);
+            campaignRepo.save(
+                    Campaign.builder()
+                            .kind(kind)
+                            .startDate(LocalDateTime.now())
+                            .name("Test")
+                            .build()
+            );
         };
     }
 

@@ -32,9 +32,7 @@ public class CustomerUI extends UI {
     @Override
     protected void init(VaadinRequest request) {
         // build layout
-        HorizontalLayout actions = new HorizontalLayout(filter, addNewBtn);
-        VerticalLayout mainLayout = new VerticalLayout(actions, grid, editor);
-        setContent(mainLayout);
+        setContent(new VerticalLayout(new HorizontalLayout(filter, addNewBtn), grid, editor));
 
         grid.setHeight(300, Unit.PIXELS);
         grid.setColumns("id", "firstName", "lastName");

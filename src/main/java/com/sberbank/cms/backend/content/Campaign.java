@@ -12,7 +12,6 @@ import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -42,7 +41,6 @@ public class Campaign implements Serializable {
 
     private LocalDateTime endDate;
 
-    @NotNull
     @Type(type = "JsonbUserType")
     Map<String, Object> data = new HashMap<>();
 
