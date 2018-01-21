@@ -1,4 +1,4 @@
-package com.sberbank.cms.configuration;
+package com.sberbank.batch.services;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

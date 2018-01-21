@@ -1,4 +1,4 @@
-package com.sberbank.cms.configuration;
+package com.sberbank.batch.configuration;
 
 import com.sberbank.batch.Param;
 import com.sberbank.batch.Targeting;

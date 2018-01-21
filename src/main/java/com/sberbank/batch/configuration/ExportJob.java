@@ -1,5 +1,6 @@
-package com.sberbank.cms.configuration;
+package com.sberbank.batch.configuration;
 
+import com.sberbank.batch.services.Json2MapConverter;
 import com.sberbank.cms.backend.domain.model.ContentKind;
 import lombok.extern.java.Log;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;

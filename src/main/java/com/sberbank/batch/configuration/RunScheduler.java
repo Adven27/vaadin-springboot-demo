@@ -1,4 +1,4 @@
-package com.sberbank.cms.configuration;
+package com.sberbank.batch.configuration;
 
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecution;
