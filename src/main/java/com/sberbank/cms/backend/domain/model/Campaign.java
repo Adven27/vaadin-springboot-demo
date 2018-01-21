@@ -1,6 +1,6 @@
-package com.sberbank.cms.backend.content;
+package com.sberbank.cms.backend.domain.model;
 
-import com.sberbank.cms.backend.utils.JsonbUserType;
+import com.sberbank.cms.backend.domain.model.support.JsonbUserType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

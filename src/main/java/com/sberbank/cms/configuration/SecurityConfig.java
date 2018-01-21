@@ -1,6 +1,6 @@
 package com.sberbank.cms.configuration;
 
-import com.sberbank.cms.security.Role;
+import com.sberbank.cms.backend.security.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

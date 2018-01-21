@@ -1,4 +1,4 @@
-package com.sberbank.cms.ui.common.forms;
+package com.sberbank.cms.ui.common.components;
 
 import com.vaadin.icons.VaadinIcons;
 import org.vaadin.viritin.button.PrimaryButton;

@@ -13,7 +13,7 @@ import java.io.Serializable;
 /**
  * Just example of runnable menu item
  */
-@SideBarItem(sectionId = Sections.PLANNING, caption = "Operation", order = 3)
+@SideBarItem(sectionId = Sections.CONTENT, caption = "Operation")
 @VaadinFontIcon(VaadinIcons.REFRESH)
 @Component
 @UIScope

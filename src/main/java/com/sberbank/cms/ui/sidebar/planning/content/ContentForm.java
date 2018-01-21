@@ -1,9 +1,9 @@
 package com.sberbank.cms.ui.sidebar.planning.content;
 
-import com.sberbank.cms.backend.content.ContentField;
-import com.sberbank.cms.backend.content.ContentKind;
-import com.sberbank.cms.backend.content.ContentKindRepository;
-import com.sberbank.cms.backend.content.FieldType;
+import com.sberbank.cms.backend.domain.model.ContentField;
+import com.sberbank.cms.backend.domain.model.ContentKind;
+import com.sberbank.cms.backend.domain.model.FieldType;
+import com.sberbank.cms.backend.domain.services.ContentKindRepository;
 import com.sberbank.cms.ui.common.forms.CommonForm;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.ViewScope;

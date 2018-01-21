@@ -1,8 +1,8 @@
 package com.sberbank.cms.ui.sidebar.planning;
 
-import com.sberbank.cms.backend.content.Place;
-import com.sberbank.cms.backend.content.PlaceRepository;
-import com.sberbank.cms.ui.common.forms.AddButton;
+import com.sberbank.cms.backend.domain.model.Place;
+import com.sberbank.cms.backend.domain.services.PlaceRepository;
+import com.sberbank.cms.ui.common.components.AddButton;
 import com.sberbank.cms.ui.sidebar.Sections;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
@@ -27,7 +27,7 @@ import static com.vaadin.ui.themes.ValoTheme.BUTTON_DANGER;
 import static com.vaadin.ui.themes.ValoTheme.LAYOUT_COMPONENT_GROUP;
 
 @SpringView(name = PlacesView.VIEW_NAME)
-@SideBarItem(sectionId = Sections.PLANNING, caption = "Places", order = 2)
+@SideBarItem(sectionId = Sections.CONTENT, caption = "Places", order = 2)
 @VaadinFontIcon(TAGS)
 @ViewScope
 public class PlacesView extends VerticalLayout implements View {

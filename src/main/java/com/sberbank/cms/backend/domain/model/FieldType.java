@@ -1,4 +1,4 @@
-package com.sberbank.cms.backend.content;
+package com.sberbank.cms.backend.domain.model;
 
 import com.vaadin.data.*;
 import com.vaadin.server.Setter;

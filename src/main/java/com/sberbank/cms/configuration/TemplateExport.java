@@ -1,7 +1,7 @@
 package com.sberbank.cms.configuration;
 
 import com.sberbank.batch.Param;
-import com.sberbank.cms.backend.content.Campaign;
+import com.sberbank.cms.backend.domain.model.Campaign;
 import lombok.extern.java.Log;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.batch.core.Job;

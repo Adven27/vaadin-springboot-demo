@@ -1,4 +1,4 @@
-package com.sberbank.cms.backend.content;
+package com.sberbank.cms.backend.domain.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,15 +1,18 @@
 package com.sberbank.cms.ui.sidebar.settings.users;
 
-import com.sberbank.cms.security.Role;
-import com.sberbank.cms.security.UserInfo;
-import com.sberbank.cms.security.UserRepository;
+import com.sberbank.cms.backend.security.Role;
+import com.sberbank.cms.backend.security.UserInfo;
+import com.sberbank.cms.backend.security.UserRepository;
 import com.sberbank.cms.ui.common.forms.CommonForm;
 import com.vaadin.data.Converter;
 import com.vaadin.data.Result;
 import com.vaadin.data.ValueContext;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
-import com.vaadin.ui.*;
+import com.vaadin.ui.ComboBox;
+import com.vaadin.ui.FormLayout;
+import com.vaadin.ui.PasswordField;
+import com.vaadin.ui.TextField;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.vaadin.spring.events.EventBus;
 import org.vaadin.viritin.fields.MTextField;

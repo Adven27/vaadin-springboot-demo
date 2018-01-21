@@ -1,4 +1,4 @@
-package com.sberbank.cms.security;
+package com.sberbank.cms.backend.security;
 
 public class Role {
     private static final String AUTH_PREFIX = "ROLE_";

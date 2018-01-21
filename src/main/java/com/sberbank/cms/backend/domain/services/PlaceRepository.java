@@ -1,5 +1,6 @@
-package com.sberbank.cms.backend.content;
+package com.sberbank.cms.backend.domain.services;
 
+import com.sberbank.cms.backend.domain.model.Place;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

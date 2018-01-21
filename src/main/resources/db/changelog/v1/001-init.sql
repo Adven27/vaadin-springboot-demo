@@ -1,5 +1,5 @@
 --liquibase formatted sql
---changeset adven:0001
+--changeset init:001
 CREATE TABLE content_kind (
   str_id        TEXT PRIMARY KEY,
   name          TEXT,

@@ -10,11 +10,11 @@ import org.vaadin.spring.sidebar.annotation.SideBarSections;
  * to lookup the annotations from the Spring application context.
  */
 @SideBarSections({
-        @SideBarSection(id = Sections.PLANNING, caption = "Section 1"),
+        @SideBarSection(id = Sections.CONTENT, caption = "Content"),
         @SideBarSection(id = Sections.SETTINGS, caption = "Settings"),
 })
 @Component
 public class Sections {
-    public static final String PLANNING = "planning";
+    public static final String CONTENT = "content";
     public static final String SETTINGS = "settings";
 }

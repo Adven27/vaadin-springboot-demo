@@ -1,4 +1,4 @@
-package com.sberbank.cms.security;
+package com.sberbank.cms.backend.security;
 
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;

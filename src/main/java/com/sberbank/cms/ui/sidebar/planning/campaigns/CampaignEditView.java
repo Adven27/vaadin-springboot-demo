@@ -1,6 +1,10 @@
 package com.sberbank.cms.ui.sidebar.planning.campaigns;
 
-import com.sberbank.cms.backend.content.*;
+import com.sberbank.cms.backend.domain.model.Campaign;
+import com.sberbank.cms.backend.domain.model.ContentField;
+import com.sberbank.cms.backend.domain.services.CampaignRepository;
+import com.sberbank.cms.backend.domain.services.ContentKindRepository;
+import com.sberbank.cms.backend.domain.services.PlaceRepository;
 import com.vaadin.data.BeanValidationBinder;
 import com.vaadin.data.Binder;
 import com.vaadin.data.BindingValidationStatus;
@@ -138,7 +142,7 @@ public class CampaignEditView extends VerticalLayout implements View {
     private void setBean(Campaign bean) {
         binder.setBean(bean);
         binder.forField(places).bind(
-                campaign -> setter(campaign),
+                campaign -> getPlacesFrom(campaign),
                 (campaign, val) -> {
                     Map<String, Object> data = campaign.getData();
                     data.put(places.getCaption(), new ArrayList<>(val));
@@ -148,10 +152,14 @@ public class CampaignEditView extends VerticalLayout implements View {
         addKindFields(binder);
     }
 
-    private HashSet<String> setter(Campaign c) {
-        return c.getData() == null || c.getData().isEmpty()
-                ? new HashSet<>()
-                : new HashSet<>((List<String>) c.getData().get(places.getCaption()));
+    private Set<String> getPlacesFrom(Campaign c) {
+        if (c.getData() != null && !c.getData().isEmpty()) {
+            Object places = c.getData().get(this.places.getCaption());
+            if (places != null) {
+                return new HashSet<>((List<String>) places);
+            }
+        }
+        return new HashSet<>();
     }
 
     private void showNotFound() {

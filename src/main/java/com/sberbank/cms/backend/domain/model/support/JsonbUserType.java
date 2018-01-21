@@ -1,4 +1,4 @@
-package com.sberbank.cms.backend.utils;
+package com.sberbank.cms.backend.domain.model.support;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -21,7 +21,8 @@ public class JsonbUserType implements UserType {
     private final Gson gson = new GsonBuilder().serializeNulls().create();
 
     @Override
-    public void nullSafeSet(PreparedStatement st, Object value, int index, SessionImplementor session) throws HibernateException, SQLException {
+    public void nullSafeSet(PreparedStatement st, Object value, int index, SessionImplementor session)
+            throws HibernateException, SQLException {
         if (value == null) {
             st.setNull(index, Types.OTHER);
         } else {
@@ -30,25 +31,16 @@ public class JsonbUserType implements UserType {
     }
 
     @Override
-    public Object deepCopy(Object originalValue) throws HibernateException {
-        if (originalValue == null) {
-            return null;
-        }
-
-        if (!(originalValue instanceof Map)) {
-            return null;
-        }
-
-        Map<String, Object> resultMap = new HashMap<>();
-
-        Map<?, ?> tempMap = (Map<?, ?>) originalValue;
-        tempMap.forEach((key, value) -> resultMap.put((String) key, value));
-
-        return resultMap;
+    public Object deepCopy(Object original) throws HibernateException {
+        return original != null && original instanceof Map
+                ? new HashMap<String, Object>((Map<? extends String, ?>) original)
+                : null;
     }
 
     @Override
-    public Object nullSafeGet(ResultSet rs, String[] names, SessionImplementor session, Object owner) throws HibernateException, SQLException {
+    public Object nullSafeGet(ResultSet rs, String[] names, SessionImplementor session, Object owner)
+            throws HibernateException, SQLException {
+
         PGobject o = (PGobject) rs.getObject(names[0]);
         return o == null || o.getValue() == null
                 ? new HashMap<String, String>()
@@ -61,7 +53,8 @@ public class JsonbUserType implements UserType {
         if (copy instanceof Serializable) {
             return (Serializable) copy;
         }
-        throw new SerializationException(String.format("Cannot serialize '%s', %s is not Serializable.", value, value.getClass()), null);
+        throw new SerializationException(
+                String.format("Cannot serialize '%s', %s is not Serializable.", value, value.getClass()), null);
     }
 
     @Override
@@ -81,10 +74,7 @@ public class JsonbUserType implements UserType {
 
     @Override
     public int hashCode(Object x) throws HibernateException {
-        if (x == null) {
-            return 0;
-        }
-        return x.hashCode();
+        return x == null ? 0 : x.hashCode();
     }
 
     @Override

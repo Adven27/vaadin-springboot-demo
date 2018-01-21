@@ -1,9 +1,13 @@
 package com.sberbank.cms;
 
-import com.sberbank.cms.backend.content.*;
-import com.sberbank.cms.security.Role;
-import com.sberbank.cms.security.UserInfo;
-import com.sberbank.cms.security.UserRepository;
+import com.sberbank.cms.backend.domain.model.Campaign;
+import com.sberbank.cms.backend.domain.model.ContentField;
+import com.sberbank.cms.backend.domain.model.ContentKind;
+import com.sberbank.cms.backend.domain.services.CampaignRepository;
+import com.sberbank.cms.backend.domain.services.ContentKindRepository;
+import com.sberbank.cms.backend.security.Role;
+import com.sberbank.cms.backend.security.UserInfo;
+import com.sberbank.cms.backend.security.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -16,8 +20,8 @@ import org.vaadin.spring.sidebar.annotation.EnableSideBar;
 import java.time.LocalDateTime;
 import java.util.Date;
 
-import static com.sberbank.cms.backend.content.FieldType.RICH_TEXT;
-import static com.sberbank.cms.backend.content.FieldType.TEXT;
+import static com.sberbank.cms.backend.domain.model.FieldType.RICH_TEXT;
+import static com.sberbank.cms.backend.domain.model.FieldType.TEXT;
 import static java.util.Arrays.asList;
 
 @EnableSideBar

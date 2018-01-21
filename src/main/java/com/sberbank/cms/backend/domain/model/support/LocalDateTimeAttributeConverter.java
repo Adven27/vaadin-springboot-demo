@@ -1,4 +1,4 @@
-package com.sberbank.cms.backend.utils;
+package com.sberbank.cms.backend.domain.model.support;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;

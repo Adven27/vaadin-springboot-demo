@@ -15,11 +15,9 @@ import java.io.Serializable;
 @Component
 @UIScope
 public class LogOut implements Runnable, Serializable {
-    private static final long serialVersionUID = 7376470664287797415L;
 
     @Override
     public void run() {
-//        vaadinSecurity.logout();
         UI current = UI.getCurrent();
         current.getSession().getSession().invalidate();
         current.getPage().reload();

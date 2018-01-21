@@ -1,7 +1,7 @@
 package com.sberbank.cms.ui.sidebar.planning.content;
 
-import com.sberbank.cms.backend.content.ContentKind;
-import com.sberbank.cms.backend.content.ContentKindRepository;
+import com.sberbank.cms.backend.domain.model.ContentKind;
+import com.sberbank.cms.backend.domain.services.ContentKindRepository;
 import com.sberbank.cms.ui.common.forms.CommonForm;
 import com.sberbank.cms.ui.common.forms.CustomGrid;
 import com.sberbank.cms.ui.sidebar.Sections;
@@ -17,13 +17,13 @@ import org.vaadin.spring.sidebar.annotation.SideBarItem;
 import org.vaadin.spring.sidebar.annotation.VaadinFontIcon;
 import org.vaadin.viritin.grid.MGrid;
 
-import static com.sberbank.cms.security.Role.ROLE_ADMIN;
-import static com.sberbank.cms.security.Role.ROLE_OFFICER;
+import static com.sberbank.cms.backend.security.Role.ROLE_ADMIN;
+import static com.sberbank.cms.backend.security.Role.ROLE_OFFICER;
 import static com.vaadin.icons.VaadinIcons.WRENCH;
 
 @Secured({ROLE_ADMIN, ROLE_OFFICER})
 @SpringView(name = ContentView.VIEW_NAME)
-@SideBarItem(sectionId = Sections.PLANNING, caption = "Content", order = 3)
+@SideBarItem(sectionId = Sections.CONTENT, caption = "Content", order = 3)
 @VaadinFontIcon(WRENCH)
 @ViewScope
 public class ContentView extends VerticalLayout implements View {
@@ -63,8 +63,7 @@ public class ContentView extends VerticalLayout implements View {
 
             @Override
             public void listEntities(Grid<ContentKind> grid, String nameFilter) {
-                String likeFilter = "%" + nameFilter + "%";
-                grid.setItems(repo.findByNameLikeIgnoreCase(likeFilter));
+                grid.setItems(repo.findByNameLikeIgnoreCase("%" + nameFilter + "%"));
 
             }
 

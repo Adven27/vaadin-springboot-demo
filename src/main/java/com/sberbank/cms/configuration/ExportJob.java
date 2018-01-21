@@ -1,6 +1,6 @@
 package com.sberbank.cms.configuration;
 
-import com.sberbank.cms.backend.content.ContentKind;
+import com.sberbank.cms.backend.domain.model.ContentKind;
 import lombok.extern.java.Log;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.support.ApplicationContextFactory;

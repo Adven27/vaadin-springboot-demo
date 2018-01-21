@@ -21,14 +21,14 @@ import static com.vaadin.shared.ui.ContentMode.HTML;
 
 @SpringUI
 @Theme(ValoTheme.THEME_NAME)
-public class Dash extends UI {
+public class DashUI extends UI {
     private static final long serialVersionUID = -7747249047198990160L;
 
     private final SpringViewProvider viewProvider;
     private final ValoSideBar sideBar;
     private final VaadinSecurity vaadinSecurity;
 
-    public Dash(SpringViewProvider viewProvider, ValoSideBar sideBar, VaadinSecurity vaadinSecurity) {
+    public DashUI(SpringViewProvider viewProvider, ValoSideBar sideBar, VaadinSecurity vaadinSecurity) {
         this.viewProvider = viewProvider;
         this.sideBar = sideBar;
         this.vaadinSecurity = vaadinSecurity;

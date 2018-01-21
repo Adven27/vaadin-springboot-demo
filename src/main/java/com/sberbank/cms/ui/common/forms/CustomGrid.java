@@ -1,5 +1,7 @@
 package com.sberbank.cms.ui.common.forms;
 
+import com.sberbank.cms.ui.common.components.AddButton;
+import com.sberbank.cms.ui.common.components.EditButton;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
@@ -7,14 +9,12 @@ import org.vaadin.spring.events.EventBus;
 import org.vaadin.spring.events.EventScope;
 import org.vaadin.spring.events.annotation.EventBusListenerMethod;
 import org.vaadin.viritin.button.ConfirmButton;
-import org.vaadin.viritin.button.MButton;
 import org.vaadin.viritin.fields.MTextField;
 import org.vaadin.viritin.form.AbstractForm;
 import org.vaadin.viritin.grid.MGrid;
 import org.vaadin.viritin.layouts.MHorizontalLayout;
 import org.vaadin.viritin.layouts.MVerticalLayout;
 
-import static com.vaadin.icons.VaadinIcons.PENCIL;
 import static com.vaadin.icons.VaadinIcons.TRASH;
 import static com.vaadin.ui.Alignment.BOTTOM_CENTER;
 import static com.vaadin.ui.Grid.SelectionMode.NONE;
@@ -32,7 +32,7 @@ public abstract class CustomGrid<T> extends CustomComponent {
         list = grid();
         list.setSelectionMode(NONE);
         list.addComponentColumn(row -> new HorizontalLayout(
-                        new MButton(PENCIL, click -> edit(row)),
+                        new EditButton(click -> edit(row)),
                         new ConfirmButton(TRASH, "Are you sure you want to delete the entry?", () -> {
                             delete(row);
                             listEntities();
